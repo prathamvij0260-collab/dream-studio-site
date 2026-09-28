@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://dreamstudio194.vercel.app/sitemap.xml
+Sitemap: https://dream-studio-site.vercel.app/sitemap.xml

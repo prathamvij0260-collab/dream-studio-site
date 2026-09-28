@@ -12,7 +12,8 @@
     }));
   }
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const year = document.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
 
   const revealItems = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -32,30 +33,35 @@
   const form = document.getElementById('quote-form');
   const status = document.getElementById('form-status');
   if (form) {
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
-      const data = new FormData(form);
-      if (data.get('website')) return;
-      const subject = `Dream Studio quote request — ${data.get('business') || data.get('name')}`;
-      const lines = [
-        `Name: ${data.get('name')}`,
-        `Business: ${data.get('business') || 'Not provided'}`,
-        `Email: ${data.get('email')}`,
-        `Phone: ${data.get('phone') || 'Not provided'}`,
-        `Location: ${data.get('location')}`,
-        `Service: ${data.get('service')}`,
-        `Estimated quantity: ${data.get('quantity') || 'Not provided'}`,
-        `Preferred timing: ${data.get('timing') || 'Not provided'}`,
-        '',
-        'Project details:',
-        data.get('message'),
-        '',
-        'Please attach any artwork or reference files to this email before sending.'
-      ];
-      const href = `mailto:dreamstudio194@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
-      status.textContent = 'Opening your email app with the quote details prepared…';
-      window.location.href = href;
+
+      const button = form.querySelector('button[type="submit"]');
+      const data = Object.fromEntries(new FormData(form).entries());
+      if (data.website) return;
+
+      button.disabled = true;
+      button.textContent = 'Sending…';
+      status.textContent = 'Sending your quote request securely…';
+
+      try {
+        const response = await fetch('/api/quote', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || 'Unable to send your request.');
+
+        form.reset();
+        status.textContent = 'Thanks — your quote request was sent to Dream Studio. We’ll get back to you as soon as possible.';
+      } catch (error) {
+        status.textContent = 'We could not send the form right now. Please email dreamstudio194@gmail.com or call 438-337-9508.';
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Send Quote Request';
+      }
     });
   }
 
@@ -69,18 +75,20 @@
     script.setAttribute('data-ds-analytics', 'true');
     document.head.appendChild(script);
   };
-  if (!accepted) {
-    banner.hidden = false;
-  } else if (accepted === 'yes') {
-    loadAnalytics();
+  if (banner) {
+    if (!accepted) {
+      banner.hidden = false;
+    } else if (accepted === 'yes') {
+      loadAnalytics();
+    }
+    document.getElementById('analytics-accept')?.addEventListener('click', () => {
+      localStorage.setItem('dreamstudio_analytics', 'yes');
+      banner.hidden = true;
+      loadAnalytics();
+    });
+    document.getElementById('analytics-decline')?.addEventListener('click', () => {
+      localStorage.setItem('dreamstudio_analytics', 'no');
+      banner.hidden = true;
+    });
   }
-  document.getElementById('analytics-accept')?.addEventListener('click', () => {
-    localStorage.setItem('dreamstudio_analytics', 'yes');
-    banner.hidden = true;
-    loadAnalytics();
-  });
-  document.getElementById('analytics-decline')?.addEventListener('click', () => {
-    localStorage.setItem('dreamstudio_analytics', 'no');
-    banner.hidden = true;
-  });
 })();
