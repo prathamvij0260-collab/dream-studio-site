@@ -206,75 +206,132 @@
 
     const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
     const range = (p, from, to) => clamp((p - from) / (to - from));
-    const fadeWindow = (p, inA, inB, outA, outB) =>
-      Math.min(range(p, inA, inB), 1 - range(p, outA, outB));
+    const smoothstep = (t) => {
+      t = clamp(t);
+      return t * t * (3 - 2 * t);
+    };
+    const easeInOutCubic = (t) => {
+      t = clamp(t);
+      return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
 
-    let ticking = false;
+    let targetIntroProgress = 0;
+    let currentIntroProgress = 0;
+    let introAnimating = false;
 
-    const render = () => {
-      ticking = false;
-      if (reduced.matches) return;
-
+    const readIntroProgress = () => {
       const rect = intro.getBoundingClientRect();
       const maxScroll = Math.max(1, intro.offsetHeight - window.innerHeight);
-      const p = clamp(-rect.top / maxScroll);
+      targetIntroProgress = clamp(-rect.top / maxScroll);
+    };
 
-      // 1) Full logo holds long enough to register.
-      // 2) The exact seated silhouette separates from it.
-      const brandFade = range(p, 0.12, 0.29);
+    const paintIntro = (p) => {
+      // Keep the complete logo on screen first, then fade it gradually.
+      const brandFade = smoothstep(range(p, .13, .34));
       brandScene.style.opacity = String(1 - brandFade);
-      brandScene.style.transform = `translate(-50%,-50%) scale(${1 - brandFade * .035})`;
+      brandScene.style.transform =
+        `translate3d(-50%,-50%,0) scale(${1 - brandFade * .025})`;
 
-      // Character stays in roughly the same place while standing.
-      const standPhase = range(p, 0.14, 0.48);
-      const walkPhase = range(p, 0.48, 0.82);
+      // Stand first, then walk. The two motions never fight each other.
+      const standRaw = range(p, .15, .50);
+      const standPhase = easeInOutCubic(standRaw);
+      const walkRaw = range(p, .50, .86);
+      const walkPhase = easeInOutCubic(walkRaw);
+
       const startY = window.innerWidth <= 820 ? 3 : 1;
       const standLift = -8 * standPhase;
+      const walkBob = walkRaw > 0 && walkRaw < 1
+        ? Math.sin(walkRaw * Math.PI * 8) * .45
+        : 0;
       const travelX = (window.innerWidth <= 820 ? -34 : -40) * walkPhase;
 
-      character.style.opacity = String(range(p, 0.12, 0.18) * (1 - range(p, .88, .97)));
+      const charIn = smoothstep(range(p, .11, .19));
+      const charOut = smoothstep(range(p, .89, .98));
+      character.style.opacity = String(charIn * (1 - charOut));
       character.style.transform =
-        `translate3d(calc(-50% + ${travelX}vw), calc(-50% + ${startY + standLift}vh), 0)`;
+        `translate3d(calc(-50% + ${travelX}vw), calc(-50% + ${startY + standLift + walkBob}vh), 0)`;
 
-      // Pose crossfades make the real seated person visibly lean, rise, stand and then walk.
-      sit.style.opacity = String(fadeWindow(p, .12, .17, .23, .31));
-      rise.style.opacity = String(fadeWindow(p, .23, .30, .35, .43));
-      stand.style.opacity = String(fadeWindow(p, .35, .42, .48, .55));
+      // Continuous pose blending — no hard frame switching.
+      sit.style.opacity = '0';
+      rise.style.opacity = '0';
+      stand.style.opacity = '0';
+      walkA.style.opacity = '0';
+      walkB.style.opacity = '0';
 
-      const walking = range(p, .48, .82);
-      if (walking > 0 && walking < 1) {
-        const step = (Math.floor(walking * 10) % 2) === 0;
-        walkA.style.opacity = step ? '1' : '0';
-        walkB.style.opacity = step ? '0' : '1';
+      if (p < .24) {
+        sit.style.opacity = '1';
+      } else if (p < .36) {
+        const t = smoothstep(range(p, .24, .36));
+        sit.style.opacity = String(1 - t);
+        rise.style.opacity = String(t);
+      } else if (p < .49) {
+        const t = smoothstep(range(p, .36, .49));
+        rise.style.opacity = String(1 - t);
+        stand.style.opacity = String(t);
+      } else if (p < .54) {
+        const t = smoothstep(range(p, .49, .54));
+        stand.style.opacity = String(1 - t);
+        walkA.style.opacity = String(t);
+      } else if (p < .88) {
+        const walking = range(p, .54, .88);
+        // Sine blend keeps one walking frame flowing into the next.
+        const blend = .5 - .5 * Math.cos(walking * Math.PI * 8);
+        walkA.style.opacity = String(1 - blend);
+        walkB.style.opacity = String(blend);
       } else {
-        walkA.style.opacity = '0';
-        walkB.style.opacity = '0';
+        walkB.style.opacity = '1';
       }
 
-      // Let the silhouette grow naturally from seated to standing scale.
+      // Gradual scale change keeps the body from popping between pose sizes.
       const poseScale = .82 + standPhase * .18;
       character.style.setProperty('--character-scale', String(poseScale));
 
-      const copyIn = range(p, .66, .82);
+      const copyIn = smoothstep(range(p, .68, .86));
       copy.style.opacity = String(copyIn);
       if (window.innerWidth > 820) {
-        copy.style.transform = `translateY(calc(-46% + ${(1 - copyIn) * 24}px))`;
+        copy.style.transform = `translate3d(0,calc(-46% + ${(1 - copyIn) * 22}px),0)`;
       } else {
-        copy.style.transform = `translateY(${(1 - copyIn) * 18}px)`;
+        copy.style.transform = `translate3d(0,${(1 - copyIn) * 16}px,0)`;
       }
 
-      hint.style.opacity = String(1 - range(p, 0, .12));
+      hint.style.opacity = String(1 - smoothstep(range(p, 0, .13)));
     };
 
-    const queue = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(render);
+    const animateIntro = () => {
+      if (reduced.matches) {
+        introAnimating = false;
+        return;
+      }
+
+      // Damp the scroll input. This removes mouse-wheel/trackpad jumps.
+      currentIntroProgress += (targetIntroProgress - currentIntroProgress) * .10;
+
+      if (Math.abs(targetIntroProgress - currentIntroProgress) < .00035) {
+        currentIntroProgress = targetIntroProgress;
+      }
+
+      paintIntro(currentIntroProgress);
+
+      if (currentIntroProgress !== targetIntroProgress) {
+        requestAnimationFrame(animateIntro);
+      } else {
+        introAnimating = false;
+      }
     };
 
-    window.addEventListener('scroll', queue, {passive: true});
-    window.addEventListener('resize', queue);
-    render();
+    const queueIntro = () => {
+      readIntroProgress();
+      if (!introAnimating) {
+        introAnimating = true;
+        requestAnimationFrame(animateIntro);
+      }
+    };
+
+    window.addEventListener('scroll', queueIntro, {passive:true});
+    window.addEventListener('resize', queueIntro);
+    readIntroProgress();
+    currentIntroProgress = targetIntroProgress;
+    paintIntro(currentIntroProgress);
 
     // Keep the print animation directly after the living-logo sequence.
     const printScene = document.createElement('section');
@@ -317,16 +374,18 @@
     const printHead = printScene.querySelector('.print-head');
     const printCopy = printScene.querySelector('.print-copy');
     const printFinish = printScene.querySelector('.print-finish');
-    let printTicking = false;
 
-    const renderPrint = () => {
-      printTicking = false;
-      if (reduced.matches) return;
+    let targetPrintProgress = 0;
+    let currentPrintProgress = 0;
+    let printAnimating = false;
 
+    const readPrintProgress = () => {
       const rect = printScene.getBoundingClientRect();
       const maxScroll = Math.max(1, printScene.offsetHeight - window.innerHeight);
-      const p = clamp(-rect.top / maxScroll);
+      targetPrintProgress = clamp(-rect.top / maxScroll);
+    };
 
+    const paintPrint = (p) => {
       const paper = range(p, .08, .72);
       const y = -62 + (paper * 88);
       sheet.style.transform = `translate3d(-50%,${y}%,0)`;
@@ -340,20 +399,50 @@
       printHead.style.transform = `translateX(${headX}%)`;
       printHead.style.opacity = String(headProgress > 0 && headProgress < 1 ? 1 : .25);
 
-      const finishIn = range(p, .73, .91);
+      // Finish text only arrives once the sheet is almost fully printed.
+      const finishIn = range(p, .84, .96);
       printFinish.style.opacity = String(finishIn);
-      printFinish.style.transform = `translateY(${(1 - finishIn) * 16}px)`;
+
+      if (window.innerWidth > 820) {
+        printFinish.style.transform = `translateY(${(1 - finishIn) * 10}px)`;
+      }
+    };
+
+    const animatePrint = () => {
+      if (reduced.matches) {
+        printAnimating = false;
+        return;
+      }
+
+      // Gentle damping makes mouse-wheel/trackpad scroll feel continuous.
+      currentPrintProgress += (targetPrintProgress - currentPrintProgress) * .16;
+
+      if (Math.abs(targetPrintProgress - currentPrintProgress) < .0006) {
+        currentPrintProgress = targetPrintProgress;
+      }
+
+      paintPrint(currentPrintProgress);
+
+      if (currentPrintProgress !== targetPrintProgress) {
+        requestAnimationFrame(animatePrint);
+      } else {
+        printAnimating = false;
+      }
     };
 
     const queuePrint = () => {
-      if (printTicking) return;
-      printTicking = true;
-      requestAnimationFrame(renderPrint);
+      readPrintProgress();
+      if (!printAnimating) {
+        printAnimating = true;
+        requestAnimationFrame(animatePrint);
+      }
     };
 
     window.addEventListener('scroll', queuePrint, {passive:true});
     window.addEventListener('resize', queuePrint);
-    renderPrint();
+    readPrintProgress();
+    currentPrintProgress = targetPrintProgress;
+    paintPrint(currentPrintProgress);
   }
 
   if (!document.querySelector('.whatsapp-float')) {
