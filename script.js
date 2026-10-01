@@ -162,52 +162,53 @@
 
   if (header && !document.querySelector('.intro-scroll')) {
     const intro = document.createElement('section');
-    intro.className = 'intro-scroll';
+    intro.className = 'intro-scroll intro-scroll-v3';
     intro.setAttribute('aria-label', 'Dream Studio Print introduction');
     intro.innerHTML = `
-      <div class="intro-stage">
-        <div class="intro-orbit intro-orbit-a" aria-hidden="true"></div>
-        <div class="intro-orbit intro-orbit-b" aria-hidden="true"></div>
-
-        <div class="intro-logo" aria-label="Dream Studio Print">
-          <img src="favicon.png" alt="">
-          <div class="intro-wordmark">
-            <strong>Dream Studio</strong>
-            <span>Print</span>
+      <div class="intro-stage intro-stage-v3">
+        <div class="intro-brand-scene" aria-label="Dream Studio Print">
+          <img class="intro-logo-art" src="logo-mark.png" alt="">
+          <div class="intro-brand-name">
+            <strong>Dream Studio Print</strong>
+            <span>Make it happen.</span>
           </div>
         </div>
 
-        <div class="intro-walker" aria-hidden="true">
-          <svg viewBox="0 0 120 160">
-            <g class="walker-body" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="61" cy="26" r="13" fill="currentColor" stroke="none"/>
-              <path d="M60 45 58 93"/>
-              <path class="arm-a" d="M58 57 29 78"/>
-              <path class="arm-b" d="M60 58 91 72"/>
-              <path class="leg-a" d="M58 92 36 139"/>
-              <path class="leg-b" d="M58 92 83 137"/>
-            </g>
-          </svg>
+        <div class="intro-character" aria-hidden="true">
+          <img class="char-frame char-sit" src="person-sit.png" alt="">
+          <img class="char-frame char-rise" src="person-rise.png" alt="">
+          <img class="char-frame char-stand" src="person-stand.png" alt="">
+          <img class="char-frame char-walk-a" src="person-walk-a.png" alt="">
+          <img class="char-frame char-walk-b" src="person-walk-b.png" alt="">
         </div>
 
-        <div class="intro-copy">
+        <div class="intro-copy intro-copy-v3">
           <p class="eyebrow">Printing · Packaging · Branding</p>
           <p class="intro-title">Make it <span>happen.</span></p>
-          <p class="intro-subtitle">Ideas move. We turn them into something people can hold, see and remember.</p>
+          <p class="intro-subtitle">From an idea on screen to something people can hold.</p>
         </div>
 
-        <span class="intro-scroll-hint" aria-hidden="true">Scroll to explore <i></i></span>
+        <span class="intro-scroll-hint" aria-hidden="true">Scroll to bring it to life <i></i></span>
       </div>`;
 
     header.before(intro);
 
-    const logo = intro.querySelector('.intro-logo');
-    const walker = intro.querySelector('.intro-walker');
-    const copy = intro.querySelector('.intro-copy');
+    const brandScene = intro.querySelector('.intro-brand-scene');
+    const character = intro.querySelector('.intro-character');
+    const sit = intro.querySelector('.char-sit');
+    const rise = intro.querySelector('.char-rise');
+    const stand = intro.querySelector('.char-stand');
+    const walkA = intro.querySelector('.char-walk-a');
+    const walkB = intro.querySelector('.char-walk-b');
+    const copy = intro.querySelector('.intro-copy-v3');
     const hint = intro.querySelector('.intro-scroll-hint');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+    const range = (p, from, to) => clamp((p - from) / (to - from));
+    const fadeWindow = (p, inA, inB, outA, outB) =>
+      Math.min(range(p, inA, inB), 1 - range(p, outA, outB));
+
     let ticking = false;
 
     const render = () => {
@@ -216,29 +217,53 @@
 
       const rect = intro.getBoundingClientRect();
       const maxScroll = Math.max(1, intro.offsetHeight - window.innerHeight);
-      const progress = clamp(-rect.top / maxScroll);
+      const p = clamp(-rect.top / maxScroll);
 
-      const logoExit = clamp((progress - 0.12) / 0.34);
-      const logoScale = 1 - (0.18 * logoExit);
-      logo.style.opacity = String(1 - logoExit);
-      logo.style.transform = `translate(-50%,-50%) scale(${logoScale})`;
+      // 1) Full logo holds long enough to register.
+      // 2) The exact seated silhouette separates from it.
+      const brandFade = range(p, 0.12, 0.29);
+      brandScene.style.opacity = String(1 - brandFade);
+      brandScene.style.transform = `translate(-50%,-50%) scale(${1 - brandFade * .035})`;
 
-      const walk = clamp((progress - 0.28) / 0.48);
-      const walkerFade = clamp((progress - 0.22) / 0.12);
-      const moveVw = (window.innerWidth <= 820 ? -31 : -36) * walk;
-      walker.style.opacity = String(walkerFade);
-      walker.style.transform = `translate3d(calc(-50% + ${moveVw}vw),0,0)`;
-      walker.classList.toggle('is-walking', walk > 0.02 && walk < 0.98);
+      // Character stays in roughly the same place while standing.
+      const standPhase = range(p, 0.14, 0.48);
+      const walkPhase = range(p, 0.48, 0.82);
+      const startY = window.innerWidth <= 820 ? 3 : 1;
+      const standLift = -8 * standPhase;
+      const travelX = (window.innerWidth <= 820 ? -34 : -40) * walkPhase;
 
-      const copyIn = clamp((progress - 0.56) / 0.22);
+      character.style.opacity = String(range(p, 0.12, 0.18) * (1 - range(p, .88, .97)));
+      character.style.transform =
+        `translate3d(calc(-50% + ${travelX}vw), calc(-50% + ${startY + standLift}vh), 0)`;
+
+      // Pose crossfades make the real seated person visibly lean, rise, stand and then walk.
+      sit.style.opacity = String(fadeWindow(p, .12, .17, .23, .31));
+      rise.style.opacity = String(fadeWindow(p, .23, .30, .35, .43));
+      stand.style.opacity = String(fadeWindow(p, .35, .42, .48, .55));
+
+      const walking = range(p, .48, .82);
+      if (walking > 0 && walking < 1) {
+        const step = (Math.floor(walking * 10) % 2) === 0;
+        walkA.style.opacity = step ? '1' : '0';
+        walkB.style.opacity = step ? '0' : '1';
+      } else {
+        walkA.style.opacity = '0';
+        walkB.style.opacity = '0';
+      }
+
+      // Let the silhouette grow naturally from seated to standing scale.
+      const poseScale = .82 + standPhase * .18;
+      character.style.setProperty('--character-scale', String(poseScale));
+
+      const copyIn = range(p, .66, .82);
       copy.style.opacity = String(copyIn);
       if (window.innerWidth > 820) {
-        copy.style.transform = `translateY(calc(-42% + ${(1 - copyIn) * 22}px))`;
+        copy.style.transform = `translateY(calc(-46% + ${(1 - copyIn) * 24}px))`;
       } else {
         copy.style.transform = `translateY(${(1 - copyIn) * 18}px)`;
       }
 
-      hint.style.opacity = String(1 - clamp(progress / 0.18));
+      hint.style.opacity = String(1 - range(p, 0, .12));
     };
 
     const queue = () => {
@@ -251,6 +276,7 @@
     window.addEventListener('resize', queue);
     render();
 
+    // Keep the print animation directly after the living-logo sequence.
     const printScene = document.createElement('section');
     printScene.className = 'print-scroll';
     printScene.setAttribute('aria-label', 'Print production animation');
@@ -301,20 +327,20 @@
       const maxScroll = Math.max(1, printScene.offsetHeight - window.innerHeight);
       const p = clamp(-rect.top / maxScroll);
 
-      const paper = clamp((p - 0.08) / 0.64);
+      const paper = range(p, .08, .72);
       const y = -62 + (paper * 88);
       sheet.style.transform = `translate3d(-50%,${y}%,0)`;
 
-      const copyIn = clamp((p - 0.05) / 0.20);
+      const copyIn = range(p, .05, .25);
       printCopy.style.opacity = String(copyIn);
       printCopy.style.transform = `translateY(${(1 - copyIn) * 24}px)`;
 
-      const headProgress = clamp((p - 0.08) / 0.60);
+      const headProgress = range(p, .08, .68);
       const headX = -72 + (headProgress * 144);
       printHead.style.transform = `translateX(${headX}%)`;
       printHead.style.opacity = String(headProgress > 0 && headProgress < 1 ? 1 : .25);
 
-      const finishIn = clamp((p - 0.73) / 0.18);
+      const finishIn = range(p, .73, .91);
       printFinish.style.opacity = String(finishIn);
       printFinish.style.transform = `translateY(${(1 - finishIn) * 16}px)`;
     };
