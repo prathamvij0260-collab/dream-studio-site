@@ -14,17 +14,13 @@ module.exports = async function handler(req, res) {
   const origin = req.headers.origin;
   if (origin) {
     try {
-      if (new URL(origin).host !== req.headers.host) {
-        return res.status(403).json({error: 'Invalid origin'});
-      }
+      if (new URL(origin).host !== req.headers.host) return res.status(403).json({error: 'Invalid origin'});
     } catch {
       return res.status(403).json({error: 'Invalid origin'});
     }
   }
 
   const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-
-  // Honeypot: bots often fill hidden fields. Return success without sending.
   if (clean(body.website, 200)) return res.status(200).json({ok: true});
 
   const name = clean(body.name, 120);
@@ -53,9 +49,9 @@ module.exports = async function handler(req, res) {
     auth: {user: gmailUser, pass: gmailAppPassword}
   });
 
-  const subject = `Dream Studio quote request — ${business || name}`;
+  const subject = `Dream Studio Print quote request — ${business || name}`;
   const text = [
-    'New quote request from dream-studio-site.vercel.app',
+    'New quote request from the Dream Studio Print website',
     '',
     `Name: ${name}`,
     `Business: ${business || 'Not provided'}`,
@@ -72,7 +68,7 @@ module.exports = async function handler(req, res) {
 
   try {
     await transporter.sendMail({
-      from: `Dream Studio Website <${gmailUser}>`,
+      from: `Dream Studio Print Website <${gmailUser}>`,
       to: 'dreamstudio194@gmail.com',
       replyTo: email,
       subject,
