@@ -1,11 +1,19 @@
-# Dream Studio website
+# Dream Studio Print — Portfolio rebuild
 
-Static marketing website for Dream Studio, serving businesses across Canada.
+This version replaces the old walking-logo, collage and service-card sections with a dark, product-led portfolio experience inspired by the interaction pattern the client referenced.
 
-## Local preview
-
-Run any local static server in this folder, e.g. `python -m http.server 8080`.
+## Included
+- Brand-name-only opening screen
+- Existing printer concept rebuilt as a dark scroll animation
+- 8 visual product categories
+- Click-to-expand product transition and full product showcase viewer
+- Quote form wired to `/api/quote`
+- WhatsApp contact
+- Persistent privacy-choice fix using browser storage
+- Responsive mobile layout
+- Privacy / Terms / 404 / robots / sitemap / Search Console verification file
 
 ## Deployment
+Upload the contents of this folder to the root of the existing GitHub repository. Keep the existing Vercel environment variables `GMAIL_USER` and `GMAIL_APP_PASSWORD` configured.
 
-Designed for Vercel static deployment. Update canonical, Open Graph and sitemap URLs after a custom domain is connected.
+No secret values are included in this package.

@@ -1,8 +1,1 @@
-{
-  "name": "dream-studio-site",
-  "private": true,
-  "version": "1.0.0",
-  "dependencies": {
-    "nodemailer": "^6.9.16"
-  }
-}
+{"name":"dream-studio-print-site","private":true,"version":"2.0.0","dependencies":{"nodemailer":"^6.9.16"}}

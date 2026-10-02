@@ -1,469 +1,331 @@
 (() => {
-  const menuButton = document.querySelector('.menu-toggle');
-  const nav = document.querySelector('.site-nav');
-  if (menuButton && nav) {
-    menuButton.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      menuButton.setAttribute('aria-expanded', String(open));
-    });
-    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
-      nav.classList.remove('open');
-      menuButton.setAttribute('aria-expanded', 'false');
-    }));
-  }
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const year = document.getElementById('year');
+  const header = $('#site-header');
+  const opening = $('.opening');
+  const openingTitle = $('#opening-title');
+  const printer = $('.printer-section');
+  const paper = $('.paper-sheet');
+  const year = $('#year');
   if (year) year.textContent = new Date().getFullYear();
 
-  const revealItems = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
+  const clamp = (n, min = 0, max = 1) => Math.min(max, Math.max(min, n));
+
+  function onScroll() {
+    const y = window.scrollY;
+    const vh = Math.max(window.innerHeight, 1);
+
+    if (header) header.classList.toggle('visible', y > vh * 0.72);
+
+    if (opening && openingTitle && !reduceMotion) {
+      const p = clamp(y / (vh * 0.9));
+      openingTitle.style.transform = `translate3d(0,${-p * 38}px,0) scale(${1 - p * 0.12})`;
+      openingTitle.style.opacity = String(1 - p * 0.88);
+    }
+
+    if (printer && paper && !reduceMotion) {
+      const rect = printer.getBoundingClientRect();
+      const distance = Math.max(printer.offsetHeight - vh, 1);
+      const p = clamp(-rect.top / distance);
+      const start = -58;
+      const end = 55;
+      const yPct = start + (end - start) * p;
+      paper.style.transform = `translate3d(-50%,${yPct}%,0)`;
+    }
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        onScroll();
+        ticking = false;
       });
-    }, {threshold: 0.12});
-    revealItems.forEach(item => observer.observe(item));
-  } else {
-    revealItems.forEach(item => item.classList.add('visible'));
+    }
+  }, { passive: true });
+  onScroll();
+
+  // Mobile / fullscreen menu
+  const menuButton = $('#menu-button');
+  const menuPanel = $('#menu-panel');
+  function closeMenu() {
+    if (!menuPanel || !menuButton) return;
+    menuPanel.classList.remove('open');
+    menuPanel.setAttribute('aria-hidden', 'true');
+    menuButton.setAttribute('aria-expanded', 'false');
+    menuButton.textContent = 'Menu';
+    document.body.classList.remove('menu-open');
   }
+  function openMenu() {
+    if (!menuPanel || !menuButton) return;
+    menuPanel.classList.add('open');
+    menuPanel.setAttribute('aria-hidden', 'false');
+    menuButton.setAttribute('aria-expanded', 'true');
+    menuButton.textContent = 'Close';
+    document.body.classList.add('menu-open');
+  }
+  menuButton?.addEventListener('click', () => menuPanel.classList.contains('open') ? closeMenu() : openMenu());
+  $$('#menu-panel a').forEach(a => a.addEventListener('click', closeMenu));
 
-  const form = document.getElementById('quote-form');
-  const status = document.getElementById('form-status');
-  if (form) {
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (!form.reportValidity()) return;
-
-      const button = form.querySelector('button[type="submit"]');
-      const data = Object.fromEntries(new FormData(form).entries());
-      if (data.website) return;
-
-      button.disabled = true;
-      button.textContent = 'Sending…';
-      status.textContent = 'Sending your quote request securely…';
-
-      try {
-        const response = await fetch('/api/quote', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(data)
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(result.error || 'Unable to send your request.');
-
-        form.reset();
-        status.textContent = 'Thanks — your quote request was sent to Dream Studio Print. We’ll get back to you as soon as possible.';
-      } catch (error) {
-        status.textContent = 'We could not send the form right now. Please email dreamstudio194@gmail.com or call 438-337-9508.';
-      } finally {
-        button.disabled = false;
-        button.textContent = 'Send Quote Request';
-      }
+  // Reveal project rows as they enter the viewport.
+  const rows = $$('.project-row');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('in-view');
     });
-  }
+  }, { threshold: 0.18 });
+  rows.forEach(row => io.observe(row));
 
-  const banner = document.getElementById('cookie-banner');
-  const accepted = localStorage.getItem('dreamstudio_analytics');
-  const loadAnalytics = () => {
-    if (document.querySelector('script[data-ds-analytics]')) return;
-    const script = document.createElement('script');
-    script.defer = true;
-    script.src = '/_vercel/insights/script.js';
-    script.setAttribute('data-ds-analytics', 'true');
-    document.head.appendChild(script);
+  const products = {
+    'business-cards': {
+      number: '01 / Business Cards',
+      title: 'Business Cards',
+      tagline: 'Small format. Strong first impression.',
+      heading: 'From everyday cards to premium pieces worth keeping.',
+      description: 'Choose a practical standard stock or push the finish further with lamination, thicker cards, foil and specialty details. Artwork can be supplied or prepared by Dream Studio Print.',
+      hero: 'assets/business-cards.webp',
+      gallery: ['assets/business-cards-alt.webp', 'assets/branding-alt.webp'],
+      specs: ['14 pt standard', '16 pt matte / gloss', '20 pt / 32 pt premium', 'Foil & specialty finishes']
+    },
+    menus: {
+      number: '02 / Menus',
+      title: 'Menus',
+      tagline: 'Designed to be read, handled and remembered.',
+      heading: 'Menus that carry the restaurant brand all the way to the table.',
+      description: 'Dine-in menus, takeout menus, folded formats and premium menu presentation. Layout, hierarchy and finishing are built around how the menu will actually be used.',
+      hero: 'assets/menus.webp',
+      gallery: ['assets/menus-alt.webp', 'assets/branding.webp'],
+      specs: ['Dine-in menus', 'Takeout menus', 'Folded & multi-panel', 'Premium menu covers']
+    },
+    flyers: {
+      number: '03 / Flyers & Brochures',
+      title: 'Flyers & Brochures',
+      tagline: 'Get the message into someone’s hands.',
+      heading: 'Promotional print with a clear job to do.',
+      description: 'From a single event flyer to multi-panel brochures and promotional handouts, the focus stays on hierarchy, readability and a finish that fits the campaign.',
+      hero: 'assets/flyers.webp',
+      gallery: ['assets/flyers-alt.webp', 'assets/labels-alt.webp'],
+      specs: ['Single-sheet flyers', 'Bi-fold & tri-fold', 'Promotional cards', 'Posters & handouts']
+    },
+    labels: {
+      number: '04 / Stickers & Labels',
+      title: 'Stickers & Labels',
+      tagline: 'Brand the surface. Keep the identity moving.',
+      heading: 'Labels and stickers made for products, packaging and promotion.',
+      description: 'Custom shapes, product labels, promotional stickers and branded seals. We can help prepare artwork so the final cut, bleed and finish work cleanly.',
+      hero: 'assets/labels.webp',
+      gallery: ['assets/labels-alt.webp', 'assets/packaging-alt.webp'],
+      specs: ['Die-cut stickers', 'Product labels', 'Roll labels', 'Custom shapes & sizes']
+    },
+    packaging: {
+      number: '05 / Packaging & Bags',
+      title: 'Packaging & Bags',
+      tagline: 'The brand should still feel like the brand after checkout.',
+      heading: 'Packaging that keeps the experience consistent.',
+      description: 'Branded bags, boxes, sleeves and supporting printed pieces can be developed as one coordinated system instead of unrelated items.',
+      hero: 'assets/packaging.webp',
+      gallery: ['assets/packaging-alt.webp', 'assets/branding-alt.webp'],
+      specs: ['Paper bags', 'Custom boxes', 'Sleeves & inserts', 'Branded tissue & cards']
+    },
+    signage: {
+      number: '06 / Signage & Large Format',
+      title: 'Signage & Large Format',
+      tagline: 'Make the message work from across the room — or across the street.',
+      heading: 'Large-format pieces built for storefronts, events and promotions.',
+      description: 'Roll-up banners, window graphics, decals, vinyl and display pieces that stay readable at scale and hold together with the rest of the brand.',
+      hero: 'assets/signage.webp',
+      gallery: ['assets/signage-alt.webp', 'assets/flyers.webp'],
+      specs: ['Roll-up banners', 'Window graphics', 'Vinyl & decals', 'Event & display graphics']
+    },
+    branding: {
+      number: '07 / Branding',
+      title: 'Branding',
+      tagline: 'Build the system before you print the pieces.',
+      heading: 'A visual direction that can move from screen to print without falling apart.',
+      description: 'Logo development, brand refreshes, campaign artwork and print-ready systems. The goal is practical consistency across the things customers actually see.',
+      hero: 'assets/branding.webp',
+      gallery: ['assets/branding-alt.webp', 'assets/packaging.webp'],
+      specs: ['Logo & identity', 'Brand refresh', 'Campaign artwork', 'Print-ready design systems']
+    },
+    finishes: {
+      number: '08 / Premium Finishes',
+      title: 'Premium Finishes',
+      tagline: 'The details people notice when they pick it up.',
+      heading: 'Use finish, texture and weight to make print feel intentional.',
+      description: 'Lamination, foil, embossing and heavier stocks can turn a standard printed piece into something that feels more considered and more premium.',
+      hero: 'assets/finishes.webp',
+      gallery: ['assets/finishes-alt.webp', 'assets/business-cards.webp'],
+      specs: ['Matte & gloss lamination', 'Foil options', 'Emboss / deboss', 'Heavy premium stocks']
+    }
   };
-  if (banner) {
-    if (!accepted) {
-      banner.hidden = false;
-    } else if (accepted === 'yes') {
-      loadAnalytics();
+
+  const viewer = $('#product-viewer');
+  const viewerShell = $('#viewer-shell');
+  const closeButton = $('#viewer-close');
+  const heroImage = $('#viewer-hero-image');
+  const viewerNumber = $('#viewer-number');
+  const viewerTitle = $('#viewer-title');
+  const viewerTagline = $('#viewer-tagline');
+  const viewerHeading = $('#viewer-heading');
+  const viewerDescription = $('#viewer-description');
+  const viewerSpecs = $('#viewer-specs');
+  const gallery1 = $('#viewer-gallery-1');
+  const gallery2 = $('#viewer-gallery-2');
+  const quoteLink = $('#viewer-quote-link');
+  let activeTrigger = null;
+
+  function populateViewer(key) {
+    const p = products[key];
+    if (!p) return false;
+    heroImage.src = p.hero;
+    heroImage.alt = `${p.title} showcase`;
+    viewerNumber.textContent = p.number;
+    viewerTitle.textContent = p.title;
+    viewerTagline.textContent = p.tagline;
+    viewerHeading.textContent = p.heading;
+    viewerDescription.textContent = p.description;
+    gallery1.src = p.gallery[0];
+    gallery1.alt = `${p.title} sample detail`;
+    gallery2.src = p.gallery[1];
+    gallery2.alt = `${p.title} alternate sample`;
+    viewerSpecs.innerHTML = p.specs.map((s, i) => `<div class="spec-card"><span>0${i + 1}</span><strong>${s}</strong></div>`).join('');
+    return true;
+  }
+
+  function showViewer(key, pushState = true) {
+    if (!populateViewer(key)) return;
+    viewer.classList.add('open');
+    viewer.setAttribute('aria-hidden', 'false');
+    viewerShell.scrollTop = 0;
+    document.body.classList.add('viewer-open');
+    if (pushState) history.pushState({ product: key }, '', `#${key}`);
+    setTimeout(() => closeButton.focus(), 80);
+  }
+
+  function animateToViewer(card, key) {
+    const img = $('img', card);
+    if (!img || reduceMotion) {
+      showViewer(key);
+      return;
     }
-    document.getElementById('analytics-accept')?.addEventListener('click', () => {
-      localStorage.setItem('dreamstudio_analytics', 'yes');
-      banner.hidden = true;
-      loadAnalytics();
+    const r = img.getBoundingClientRect();
+    const clone = img.cloneNode(true);
+    clone.className = 'transition-clone';
+    Object.assign(clone.style, {
+      top: `${r.top}px`, left: `${r.left}px`, width: `${r.width}px`, height: `${r.height}px`
     });
-    document.getElementById('analytics-decline')?.addEventListener('click', () => {
-      localStorage.setItem('dreamstudio_analytics', 'no');
-      banner.hidden = true;
+    document.body.appendChild(clone);
+    document.body.classList.add('viewer-open');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      Object.assign(clone.style, { top: '0px', left: '0px', width: '100vw', height: '100vh', borderRadius: '0px' });
+    }));
+    window.setTimeout(() => {
+      showViewer(key);
+      clone.style.opacity = '0';
+      setTimeout(() => clone.remove(), 200);
+    }, 610);
+  }
+
+  function closeViewer(updateHistory = true) {
+    if (!viewer.classList.contains('open')) return;
+    viewer.classList.remove('open');
+    viewer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('viewer-open');
+    if (updateHistory && location.hash && products[location.hash.slice(1)]) {
+      history.replaceState({}, '', location.pathname + location.search);
+    }
+    activeTrigger?.focus?.();
+    activeTrigger = null;
+  }
+
+  $$('.project-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const row = card.closest('.project-row');
+      const key = row?.dataset.product;
+      if (!key) return;
+      activeTrigger = card;
+      animateToViewer(card, key);
     });
-  }
-})();
-
-(() => {
-  const brandReplace = (value) =>
-    typeof value === 'string' ? value.replace(/Dream Studio(?! Print)/g, 'Dream Studio Print') : value;
-
-  document.title = brandReplace(document.title);
-
-  document.querySelectorAll('meta[name="description"],meta[property="og:title"],meta[property="og:description"]').forEach(meta => {
-    meta.content = brandReplace(meta.content);
   });
 
-  document.querySelectorAll('[aria-label],[alt],[title]').forEach(el => {
-    for (const attr of ['aria-label', 'alt', 'title']) {
-      if (el.hasAttribute(attr)) el.setAttribute(attr, brandReplace(el.getAttribute(attr)));
+  closeButton?.addEventListener('click', () => closeViewer());
+  quoteLink?.addEventListener('click', e => {
+    e.preventDefault();
+    closeViewer();
+    setTimeout(() => $('#quote')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' }), 100);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (viewer?.classList.contains('open')) closeViewer();
+      else if (menuPanel?.classList.contains('open')) closeMenu();
+    }
+  });
+  window.addEventListener('popstate', () => {
+    const key = location.hash.slice(1);
+    if (products[key]) showViewer(key, false);
+    else closeViewer(false);
+  });
+  const initialKey = location.hash.slice(1);
+  if (products[initialKey]) setTimeout(() => showViewer(initialKey, false), 50);
+
+  // Quote form
+  const form = $('#quote-form');
+  const formStatus = $('#form-status');
+  form?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const button = $('.submit-button', form);
+    const data = Object.fromEntries(new FormData(form).entries());
+    if (!data.name || !data.email || !data.location || !data.service || !data.message) {
+      formStatus.textContent = 'Please complete all required fields.';
+      return;
+    }
+    button.disabled = true;
+    formStatus.textContent = 'Sending your request…';
+    try {
+      const res = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload.error || 'Unable to send the quote request.');
+      form.reset();
+      formStatus.textContent = 'Thanks — your quote request has been sent.';
+    } catch (err) {
+      formStatus.textContent = err.message || 'Unable to send right now. Please email dreamstudio194@gmail.com.';
+    } finally {
+      button.disabled = false;
     }
   });
 
-  const walkerText = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const textNodes = [];
-  while (walkerText.nextNode()) textNodes.push(walkerText.currentNode);
-  textNodes.forEach(node => {
-    if (node.parentElement && !['SCRIPT', 'STYLE'].includes(node.parentElement.tagName)) {
-      node.nodeValue = brandReplace(node.nodeValue);
+  // Privacy preferences: once clicked, it stays dismissed on later visits.
+  const cookieBanner = $('#cookie-banner');
+  const accept = $('#analytics-accept');
+  const decline = $('#analytics-decline');
+  const storageKey = 'dsp-analytics-choice-v1';
+
+  function safeGetPreference() {
+    try { return localStorage.getItem(storageKey); }
+    catch {
+      try { return sessionStorage.getItem(storageKey); } catch { return null; }
     }
-  });
-
-  document.querySelectorAll('script[type="application/ld+json"]').forEach(node => {
-    node.textContent = brandReplace(node.textContent);
-  });
-
-  document.querySelectorAll('.brand img').forEach(img => img.remove());
-  document.querySelectorAll('.brand span').forEach(span => span.textContent = 'Dream Studio Print');
-
-  const aboutLogo = document.querySelector('.about-logo');
-  if (aboutLogo) {
-    aboutLogo.innerHTML = `
-      <div class="about-brand-card">
-        <span class="about-brand-kicker">Dream Studio Print</span>
-        <strong>Ideas made<br>visible.</strong>
-        <span>Printing · Packaging · Branding</span>
-      </div>`;
   }
-
-  const isHome = document.querySelector('.hero') && document.querySelector('#work');
-  if (!isHome) return;
-
-  if (!document.querySelector('link[href="experience.css"],link[data-ds-experience]')) {
-    const stylesheet = document.createElement('link');
-    stylesheet.rel = 'stylesheet';
-    stylesheet.href = 'experience.css';
-    stylesheet.dataset.dsExperience = 'true';
-    document.head.appendChild(stylesheet);
+  function safeSetPreference(value) {
+    try { localStorage.setItem(storageKey, value); }
+    catch {
+      try { sessionStorage.setItem(storageKey, value); } catch {}
+    }
   }
-
-  const icon = `
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M20 11.6a8 8 0 0 1-11.8 7L4 20l1.4-4A8 8 0 1 1 20 11.6Z"/>
-      <path d="M8.2 8.1c.3 4.2 3.5 7.2 7.7 7.6"/>
-      <path d="M8.4 8.2l1.5-.7 1.2 2.3-1.1.9"/>
-      <path d="M13.5 14l.9-1.1 2.3 1.2-.6 1.5"/>
-    </svg>`;
-
-  const whatsappUrl =
-    'https://wa.me/14383379508?text=' +
-    encodeURIComponent("Hi Dream Studio Print, I'd like to discuss a printing project.");
-
-  const header = document.querySelector('.site-header');
-
-  if (header && !document.querySelector('.intro-scroll')) {
-    const intro = document.createElement('section');
-    intro.className = 'intro-scroll intro-scroll-v3';
-    intro.setAttribute('aria-label', 'Dream Studio Print introduction');
-    intro.innerHTML = `
-      <div class="intro-stage intro-stage-v3">
-        <div class="intro-brand-scene" aria-label="Dream Studio Print">
-          <img class="intro-logo-art" src="logo-mark.png" alt="">
-          <div class="intro-brand-name">
-            <strong>Dream Studio Print</strong>
-            <span>Make it happen.</span>
-          </div>
-        </div>
-
-        <div class="intro-character" aria-hidden="true">
-          <img class="char-frame char-sit" src="person-sit.png" alt="">
-          <img class="char-frame char-rise" src="person-rise.png" alt="">
-          <img class="char-frame char-stand" src="person-stand.png" alt="">
-          <img class="char-frame char-walk-a" src="person-walk-a.png" alt="">
-          <img class="char-frame char-walk-b" src="person-walk-b.png" alt="">
-        </div>
-
-        <div class="intro-copy intro-copy-v3">
-          <p class="eyebrow">Printing · Packaging · Branding</p>
-          <p class="intro-title">Make it <span>happen.</span></p>
-          <p class="intro-subtitle">From an idea on screen to something people can hold.</p>
-        </div>
-
-        <span class="intro-scroll-hint" aria-hidden="true">Scroll to bring it to life <i></i></span>
-      </div>`;
-
-    header.before(intro);
-
-    const brandScene = intro.querySelector('.intro-brand-scene');
-    const character = intro.querySelector('.intro-character');
-    const sit = intro.querySelector('.char-sit');
-    const rise = intro.querySelector('.char-rise');
-    const stand = intro.querySelector('.char-stand');
-    const walkA = intro.querySelector('.char-walk-a');
-    const walkB = intro.querySelector('.char-walk-b');
-    const copy = intro.querySelector('.intro-copy-v3');
-    const hint = intro.querySelector('.intro-scroll-hint');
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
-    const range = (p, from, to) => clamp((p - from) / (to - from));
-    const smoothstep = (t) => {
-      t = clamp(t);
-      return t * t * (3 - 2 * t);
-    };
-    const easeInOutCubic = (t) => {
-      t = clamp(t);
-      return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    };
-
-    let targetIntroProgress = 0;
-    let currentIntroProgress = 0;
-    let introAnimating = false;
-
-    const readIntroProgress = () => {
-      const rect = intro.getBoundingClientRect();
-      const maxScroll = Math.max(1, intro.offsetHeight - window.innerHeight);
-      targetIntroProgress = clamp(-rect.top / maxScroll);
-    };
-
-    const paintIntro = (p) => {
-      // Keep the complete logo on screen first, then fade it gradually.
-      const brandFade = smoothstep(range(p, .13, .34));
-      brandScene.style.opacity = String(1 - brandFade);
-      brandScene.style.transform =
-        `translate3d(-50%,-50%,0) scale(${1 - brandFade * .025})`;
-
-      // Stand first, then walk. The two motions never fight each other.
-      const standRaw = range(p, .15, .50);
-      const standPhase = easeInOutCubic(standRaw);
-      const walkRaw = range(p, .50, .86);
-      const walkPhase = easeInOutCubic(walkRaw);
-
-      const startY = window.innerWidth <= 820 ? 3 : 1;
-      const standLift = -8 * standPhase;
-      const walkBob = walkRaw > 0 && walkRaw < 1
-        ? Math.sin(walkRaw * Math.PI * 8) * .45
-        : 0;
-      const travelX = (window.innerWidth <= 820 ? -34 : -40) * walkPhase;
-
-      const charIn = smoothstep(range(p, .11, .19));
-      const charOut = smoothstep(range(p, .89, .98));
-      character.style.opacity = String(charIn * (1 - charOut));
-      character.style.transform =
-        `translate3d(calc(-50% + ${travelX}vw), calc(-50% + ${startY + standLift + walkBob}vh), 0)`;
-
-      // Continuous pose blending — no hard frame switching.
-      sit.style.opacity = '0';
-      rise.style.opacity = '0';
-      stand.style.opacity = '0';
-      walkA.style.opacity = '0';
-      walkB.style.opacity = '0';
-
-      if (p < .24) {
-        sit.style.opacity = '1';
-      } else if (p < .36) {
-        const t = smoothstep(range(p, .24, .36));
-        sit.style.opacity = String(1 - t);
-        rise.style.opacity = String(t);
-      } else if (p < .49) {
-        const t = smoothstep(range(p, .36, .49));
-        rise.style.opacity = String(1 - t);
-        stand.style.opacity = String(t);
-      } else if (p < .54) {
-        const t = smoothstep(range(p, .49, .54));
-        stand.style.opacity = String(1 - t);
-        walkA.style.opacity = String(t);
-      } else if (p < .88) {
-        const walking = range(p, .54, .88);
-        // Sine blend keeps one walking frame flowing into the next.
-        const blend = .5 - .5 * Math.cos(walking * Math.PI * 8);
-        walkA.style.opacity = String(1 - blend);
-        walkB.style.opacity = String(blend);
-      } else {
-        walkB.style.opacity = '1';
-      }
-
-      // Gradual scale change keeps the body from popping between pose sizes.
-      const poseScale = .82 + standPhase * .18;
-      character.style.setProperty('--character-scale', String(poseScale));
-
-      const copyIn = smoothstep(range(p, .68, .86));
-      copy.style.opacity = String(copyIn);
-      if (window.innerWidth > 820) {
-        copy.style.transform = `translate3d(0,calc(-46% + ${(1 - copyIn) * 22}px),0)`;
-      } else {
-        copy.style.transform = `translate3d(0,${(1 - copyIn) * 16}px,0)`;
-      }
-
-      hint.style.opacity = String(1 - smoothstep(range(p, 0, .13)));
-    };
-
-    const animateIntro = () => {
-      if (reduced.matches) {
-        introAnimating = false;
-        return;
-      }
-
-      // Damp the scroll input. This removes mouse-wheel/trackpad jumps.
-      currentIntroProgress += (targetIntroProgress - currentIntroProgress) * .10;
-
-      if (Math.abs(targetIntroProgress - currentIntroProgress) < .00035) {
-        currentIntroProgress = targetIntroProgress;
-      }
-
-      paintIntro(currentIntroProgress);
-
-      if (currentIntroProgress !== targetIntroProgress) {
-        requestAnimationFrame(animateIntro);
-      } else {
-        introAnimating = false;
-      }
-    };
-
-    const queueIntro = () => {
-      readIntroProgress();
-      if (!introAnimating) {
-        introAnimating = true;
-        requestAnimationFrame(animateIntro);
-      }
-    };
-
-    window.addEventListener('scroll', queueIntro, {passive:true});
-    window.addEventListener('resize', queueIntro);
-    readIntroProgress();
-    currentIntroProgress = targetIntroProgress;
-    paintIntro(currentIntroProgress);
-
-    // Keep the print animation directly after the living-logo sequence.
-    const printScene = document.createElement('section');
-    printScene.className = 'print-scroll';
-    printScene.setAttribute('aria-label', 'Print production animation');
-    printScene.innerHTML = `
-      <div class="print-stage">
-        <div class="print-copy">
-          <p class="eyebrow">From screen to print</p>
-          <h2>Watch the idea<br>come off the press.</h2>
-        </div>
-
-        <div class="printer-wrap" aria-hidden="true">
-          <div class="printer-back"></div>
-          <div class="printer-sheet">
-            <div class="sheet-inner">
-              <span class="sheet-small">DREAM STUDIO PRINT</span>
-              <strong>MAKE IT<br>HAPPEN.</strong>
-              <div class="sheet-spectrum"></div>
-              <p>PRINTING · PACKAGING · BRANDING</p>
-              <div class="sheet-grid">
-                <span></span><span></span><span></span><span></span>
-              </div>
-            </div>
-          </div>
-          <div class="printer-body">
-            <div class="printer-name">DREAM STUDIO PRINT</div>
-            <div class="printer-panel"><i></i><i></i><i></i></div>
-            <div class="printer-slot"></div>
-            <div class="print-head"></div>
-          </div>
-          <div class="printer-stand"><i></i><i></i></div>
-        </div>
-
-        <p class="print-finish">Designed. Printed. Finished.</p>
-      </div>`;
-    intro.after(printScene);
-
-    const sheet = printScene.querySelector('.printer-sheet');
-    const printHead = printScene.querySelector('.print-head');
-    const printCopy = printScene.querySelector('.print-copy');
-    const printFinish = printScene.querySelector('.print-finish');
-
-    let targetPrintProgress = 0;
-    let currentPrintProgress = 0;
-    let printAnimating = false;
-
-    const readPrintProgress = () => {
-      const rect = printScene.getBoundingClientRect();
-      const maxScroll = Math.max(1, printScene.offsetHeight - window.innerHeight);
-      targetPrintProgress = clamp(-rect.top / maxScroll);
-    };
-
-    const paintPrint = (p) => {
-      const paper = range(p, .08, .72);
-      const y = -62 + (paper * 88);
-      sheet.style.transform = `translate3d(-50%,${y}%,0)`;
-
-      const copyIn = range(p, .05, .25);
-      printCopy.style.opacity = String(copyIn);
-      printCopy.style.transform = `translateY(${(1 - copyIn) * 24}px)`;
-
-      const headProgress = range(p, .08, .68);
-      const headX = -72 + (headProgress * 144);
-      printHead.style.transform = `translateX(${headX}%)`;
-      printHead.style.opacity = String(headProgress > 0 && headProgress < 1 ? 1 : .25);
-
-      // Finish text only arrives once the sheet is almost fully printed.
-      const finishIn = range(p, .84, .96);
-      printFinish.style.opacity = String(finishIn);
-
-      if (window.innerWidth > 820) {
-        printFinish.style.transform = `translateY(${(1 - finishIn) * 10}px)`;
-      }
-    };
-
-    const animatePrint = () => {
-      if (reduced.matches) {
-        printAnimating = false;
-        return;
-      }
-
-      // Gentle damping makes mouse-wheel/trackpad scroll feel continuous.
-      currentPrintProgress += (targetPrintProgress - currentPrintProgress) * .16;
-
-      if (Math.abs(targetPrintProgress - currentPrintProgress) < .0006) {
-        currentPrintProgress = targetPrintProgress;
-      }
-
-      paintPrint(currentPrintProgress);
-
-      if (currentPrintProgress !== targetPrintProgress) {
-        requestAnimationFrame(animatePrint);
-      } else {
-        printAnimating = false;
-      }
-    };
-
-    const queuePrint = () => {
-      readPrintProgress();
-      if (!printAnimating) {
-        printAnimating = true;
-        requestAnimationFrame(animatePrint);
-      }
-    };
-
-    window.addEventListener('scroll', queuePrint, {passive:true});
-    window.addEventListener('resize', queuePrint);
-    readPrintProgress();
-    currentPrintProgress = targetPrintProgress;
-    paintPrint(currentPrintProgress);
+  function dismissPrivacy(value) {
+    safeSetPreference(value);
+    cookieBanner.hidden = true;
   }
-
-  if (!document.querySelector('.whatsapp-float')) {
-    const floating = document.createElement('a');
-    floating.className = 'whatsapp-float';
-    floating.href = whatsappUrl;
-    floating.target = '_blank';
-    floating.rel = 'noopener noreferrer';
-    floating.setAttribute('aria-label', 'Message Dream Studio Print on WhatsApp');
-    floating.innerHTML = `${icon}<span>WhatsApp</span>`;
-    document.body.appendChild(floating);
-  }
-
-  const contactStack = document.querySelector('.quote-copy .contact-stack');
-  if (contactStack && !document.querySelector('.whatsapp-quote')) {
-    const quoteWhatsApp = document.createElement('a');
-    quoteWhatsApp.className = 'whatsapp-quote';
-    quoteWhatsApp.href = whatsappUrl;
-    quoteWhatsApp.target = '_blank';
-    quoteWhatsApp.rel = 'noopener noreferrer';
-    quoteWhatsApp.innerHTML = `${icon}<span>Message us on WhatsApp</span>`;
-    contactStack.after(quoteWhatsApp);
+  if (cookieBanner) {
+    cookieBanner.hidden = Boolean(safeGetPreference());
+    accept?.addEventListener('click', () => dismissPrivacy('accepted'));
+    decline?.addEventListener('click', () => dismissPrivacy('essential'));
   }
 })();

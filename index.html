@@ -2,22 +2,20 @@
 <html lang="en-CA">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Dream Studio Print | Printing, Packaging & Branding Across Canada</title>
   <meta name="description" content="Dream Studio Print helps businesses across Canada with printing, packaging, branding, business cards, menus, flyers, signage, labels, banners and premium finishes.">
-  <meta name="theme-color" content="#f5efe4">
+  <meta name="theme-color" content="#0b0b0b">
   <meta name="robots" content="index,follow">
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://dream-studio-site.vercel.app/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Dream Studio Print — Make it happen.">
   <meta property="og:description" content="Printing, packaging and branding for businesses across Canada.">
-  <meta property="og:image" content="https://dream-studio-site.vercel.app/og-image.jpg">
+  <meta property="og:image" content="https://dream-studio-site.vercel.app/assets/branding.webp">
   <meta property="og:url" content="https://dream-studio-site.vercel.app/">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="preload" href="bandra-polished.webp" as="image" type="image/webp">
+  <link rel="preload" href="assets/business-cards.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="experience.css">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -35,289 +33,227 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header" id="top">
-    <div class="shell nav-wrap">
-      <a class="brand" href="#top" aria-label="Dream Studio Print home">
-        <span>Dream Studio Print</span>
-      </a>
-      <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
-      <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
-        <a href="#services">Services</a>
-        <a href="#work">Our Work</a>
-        <a href="#about">About</a>
-        <a class="nav-cta" href="#quote">Get a Quote</a>
-      </nav>
-    </div>
+  <header class="site-header" id="site-header">
+    <a class="header-brand" href="#top" aria-label="Dream Studio Print home">Dream Studio Print</a>
+    <button class="menu-button" id="menu-button" aria-expanded="false" aria-controls="menu-panel">Menu</button>
   </header>
 
+  <div class="menu-panel" id="menu-panel" aria-hidden="true">
+    <nav aria-label="Primary navigation">
+      <a href="#work">Work</a>
+      <a href="#printer">Process</a>
+      <a href="#quote">Get a Quote</a>
+      <a href="https://www.instagram.com/dreamstudio194/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    </nav>
+    <div class="menu-meta">
+      <a href="tel:+14383379508">438-337-9508</a>
+      <a href="mailto:dreamstudio194@gmail.com">dreamstudio194@gmail.com</a>
+    </div>
+  </div>
+
   <main id="main">
-    <section class="hero section">
-      <div class="shell hero-grid">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">Printing · Packaging · Branding</p>
-          <h1>Make it <span class="gradient-text">happen.</span></h1>
-          <p class="hero-lead">Professional print and brand solutions for businesses across Canada — from first concept to finished piece.</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#quote">Get a Quote</a>
-            <a class="button button-ghost" href="#work">View Our Work</a>
-          </div>
-          <div class="hero-trust" aria-label="Contact information">
-            <a href="tel:+14383379508">438-337-9508</a>
-            <span aria-hidden="true">•</span>
-            <a href="mailto:dreamstudio194@gmail.com">dreamstudio194@gmail.com</a>
-          </div>
+    <section class="opening" id="top" aria-labelledby="opening-title">
+      <h1 id="opening-title">Dream Studio Print</h1>
+    </section>
+
+    <section class="printer-section" id="printer" aria-labelledby="printer-title">
+      <div class="printer-stage">
+        <div class="printer-copy">
+          <p>From screen to print</p>
+          <h2 id="printer-title">Watch the idea<br>come off the press.</h2>
         </div>
 
-        <div class="hero-collage reveal" aria-label="Dream Studio Print project showcase">
-          <figure class="hero-card hero-card-tall">
-            <img src="bandra-polished.webp" alt="Finished Bandra Cafe roll-up banner produced for a real client" width="864" height="1536">
-            <figcaption>Real client work · Bandra Cafe</figcaption>
-          </figure>
-          <figure class="hero-card hero-card-wide">
-            <img src="haveli-menu.webp" alt="Haveli Indian Bistro takeout menu design" width="1600" height="1027">
-            <figcaption>Restaurant branding · Haveli Indian Bistro</figcaption>
-          </figure>
-          <div class="hero-stamp">Canada-wide<br><strong>service</strong></div>
+        <div class="printer-illustration" aria-hidden="true">
+          <div class="printer-back"></div>
+          <div class="printer-body">
+            <span class="printer-name">Dream Studio Print</span>
+            <div class="printer-lights"><i></i><i></i><i></i></div>
+            <div class="print-slot"><span></span></div>
+          </div>
+          <div class="paper-track">
+            <div class="paper-sheet">
+              <strong>Make it<br>happen.</strong>
+              <div class="spectrum"></div>
+              <small>Printing · Packaging · Branding</small>
+            </div>
+          </div>
+          <div class="printer-legs"><i></i><i></i></div>
         </div>
       </div>
     </section>
 
-    <section class="section section-tight" aria-labelledby="promise-title">
-      <div class="shell promise-strip reveal">
-        <div>
-          <span class="promise-number">01</span>
-          <h2 id="promise-title">Design</h2>
-          <p>Clear, brand-consistent artwork built for real-world use.</p>
-        </div>
-        <div>
-          <span class="promise-number">02</span>
-          <h2>Print</h2>
-          <p>Business essentials, promotional pieces and large-format work.</p>
-        </div>
-        <div>
-          <span class="promise-number">03</span>
-          <h2>Finish</h2>
-          <p>Lamination, foil, embossing and polished final presentation.</p>
-        </div>
-        <div>
-          <span class="promise-number">04</span>
-          <h2>Deliver</h2>
-          <p>Serving businesses across Canada without requiring a storefront visit.</p>
-        </div>
+    <section class="work-section" id="work" aria-labelledby="work-title">
+      <div class="work-intro">
+        <p class="kicker">Explore the studio</p>
+        <h2 id="work-title">Products made to be seen.</h2>
+        <p>Scroll through the collection. Tap any product to open its full showcase.</p>
+      </div>
+
+      <div class="project-list" id="project-list">
+        <article class="project-row" data-product="business-cards">
+          <button class="project-card" type="button" aria-label="Open Business Cards showcase">
+            <span class="project-index">01</span>
+            <figure><img src="assets/business-cards.webp" alt="Premium printed business cards for a restaurant brand"></figure>
+            <div class="project-title"><span>Business Cards</span><em>Open project</em></div>
+          </button>
+        </article>
+
+        <article class="project-row project-row-right" data-product="menus">
+          <button class="project-card" type="button" aria-label="Open Menus showcase">
+            <span class="project-index">02</span>
+            <figure><img src="assets/menus.webp" alt="Restaurant menu held up for presentation"></figure>
+            <div class="project-title"><span>Menus</span><em>Open project</em></div>
+          </button>
+        </article>
+
+        <article class="project-row" data-product="flyers">
+          <button class="project-card" type="button" aria-label="Open Flyers and Brochures showcase">
+            <span class="project-index">03</span>
+            <figure><img src="assets/flyers.webp" alt="Assorted flyers, brochures and printed promotional materials"></figure>
+            <div class="project-title"><span>Flyers &amp; Brochures</span><em>Open project</em></div>
+          </button>
+        </article>
+
+        <article class="project-row project-row-right" data-product="labels">
+          <button class="project-card" type="button" aria-label="Open Stickers and Labels showcase">
+            <span class="project-index">04</span>
+            <figure><img src="assets/labels.webp" alt="Custom die-cut sticker sheet"></figure>
+            <div class="project-title"><span>Stickers &amp; Labels</span><em>Open project</em></div>
+          </button>
+        </article>
+
+        <article class="project-row" data-product="packaging">
+          <button class="project-card" type="button" aria-label="Open Packaging and Bags showcase">
+            <span class="project-index">05</span>
+            <figure><img src="assets/packaging.webp" alt="Branded retail paper bags"></figure>
+            <div class="project-title"><span>Packaging &amp; Bags</span><em>Open project</em></div>
+          </button>
+        </article>
+
+        <article class="project-row project-row-right" data-product="signage">
+          <button class="project-card" type="button" aria-label="Open Signage and Large Format showcase">
+            <span class="project-index">06</span>
+            <figure><img src="assets/signage.webp" alt="Restaurant sidewalk sign and storefront graphics"></figure>
+            <div class="project-title"><span>Signage &amp; Large Format</span><em>Open project</em></div>
+          </button>
+        </article>
+
+        <article class="project-row" data-product="branding">
+          <button class="project-card" type="button" aria-label="Open Branding showcase">
+            <span class="project-index">07</span>
+            <figure><img src="assets/branding.webp" alt="Coordinated branded print products presented in a print studio"></figure>
+            <div class="project-title"><span>Branding</span><em>Open project</em></div>
+          </button>
+        </article>
+
+        <article class="project-row project-row-right" data-product="finishes">
+          <button class="project-card" type="button" aria-label="Open Premium Finishes showcase">
+            <span class="project-index">08</span>
+            <figure><img src="assets/finishes.webp" alt="Premium finished print product shown close up"></figure>
+            <div class="project-title"><span>Premium Finishes</span><em>Open project</em></div>
+          </button>
+        </article>
       </div>
     </section>
 
-    <section class="section" id="services" aria-labelledby="services-title">
-      <div class="shell">
-        <div class="section-heading reveal">
-          <p class="eyebrow">What we do</p>
-          <h2 id="services-title">Everything your brand needs to show up well.</h2>
-          <p>Dream Studio Print combines design and production so your materials feel consistent from screen to print.</p>
-        </div>
-
-        <div class="services-grid">
-          <article class="service-card reveal">
-            <span class="service-kicker">01</span>
-            <h3>Branding & Graphic Design</h3>
-            <p>Logos, brand refreshes, campaign artwork, social media graphics and print-ready design systems.</p>
-          </article>
-          <article class="service-card reveal">
-            <span class="service-kicker">02</span>
-            <h3>Business Cards & Stationery</h3>
-            <p>Standard, laminated and premium foil cards, plus branded stationery for everyday business use.</p>
-          </article>
-          <article class="service-card reveal">
-            <span class="service-kicker">03</span>
-            <h3>Menus, Flyers & Brochures</h3>
-            <p>Restaurant menus, custom binders, takeout menus, flyers, posters and brochures designed to be used.</p>
-          </article>
-          <article class="service-card reveal">
-            <span class="service-kicker">04</span>
-            <h3>Signs, Banners & Large Format</h3>
-            <p>Roll-up banners, window graphics, decals, vinyl and large-format print for storefronts, events and promotions.</p>
-          </article>
-          <article class="service-card reveal">
-            <span class="service-kicker">05</span>
-            <h3>Packaging, Labels & Stickers</h3>
-            <p>Custom packaging, bags, labels and product stickers that keep your branding consistent beyond the counter.</p>
-          </article>
-          <article class="service-card reveal">
-            <span class="service-kicker">06</span>
-            <h3>Premium Finishing</h3>
-            <p>Foiling, embossing, matte and gloss lamination, and other finish options that make print feel more premium.</p>
-          </article>
+    <section class="quote-section" id="quote" aria-labelledby="quote-title">
+      <div class="quote-heading">
+        <p class="kicker">Start a project</p>
+        <h2 id="quote-title">Tell us what you need.<br>We’ll take it from there.</h2>
+        <div class="quick-contact">
+          <a href="https://wa.me/14383379508?text=Hi%20Dream%20Studio%20Print%2C%20I'd%20like%20to%20discuss%20a%20printing%20project." target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="tel:+14383379508">Call</a>
+          <a href="mailto:dreamstudio194@gmail.com">Email</a>
         </div>
       </div>
-    </section>
 
-    <section class="section section-dark" id="work" aria-labelledby="work-title">
-      <div class="shell">
-        <div class="section-heading section-heading-light reveal">
-          <p class="eyebrow">Selected work</p>
-          <h2 id="work-title">Real projects. Real businesses.</h2>
-          <p>Client work is shown as client work — no fabricated storefronts or fake project claims.</p>
+      <form class="quote-form" id="quote-form" novalidate>
+        <div class="field-grid">
+          <label>Full name<input type="text" name="name" autocomplete="name" required></label>
+          <label>Business name<input type="text" name="business" autocomplete="organization"></label>
+          <label>Email<input type="email" name="email" autocomplete="email" required></label>
+          <label>Phone<input type="tel" name="phone" autocomplete="tel"></label>
+          <label>City / Province<input type="text" name="location" placeholder="e.g. Calgary, AB" required></label>
+          <label>Service
+            <select name="service" required>
+              <option value="">Choose one</option>
+              <option>Business cards</option>
+              <option>Menus</option>
+              <option>Flyers & brochures</option>
+              <option>Stickers & labels</option>
+              <option>Packaging & bags</option>
+              <option>Signage & large format</option>
+              <option>Branding & graphic design</option>
+              <option>Premium finishing</option>
+              <option>Other / multiple services</option>
+            </select>
+          </label>
+          <label>Estimated quantity<input type="text" name="quantity" placeholder="e.g. 500 cards"></label>
+          <label>Preferred timing<input type="text" name="timing" placeholder="e.g. within 2 weeks"></label>
         </div>
-
-        <div class="work-grid">
-          <article class="project project-featured reveal">
-            <div class="project-media">
-              <img src="bandra-polished.webp" alt="Bandra Cafe roll-up banner displayed at an event" loading="lazy" width="864" height="1536">
-            </div>
-            <div class="project-copy">
-              <p class="project-tag">Bandra Cafe</p>
-              <h3>Roll-up banner for real-world promotion.</h3>
-              <p>A clean large-format piece designed to carry the brand clearly in an event setting, with a strong visual hierarchy and location information.</p>
-              <span class="project-services">Large-format printing · Banner production</span>
-            </div>
-          </article>
-
-          <article class="project reveal">
-            <div class="project-media project-media-wide">
-              <img src="haveli-menu.webp" alt="Haveli Indian Bistro takeout menu created by Dream Studio Print" loading="lazy" width="1600" height="1027">
-            </div>
-            <div class="project-copy">
-              <p class="project-tag">Haveli Indian Bistro</p>
-              <h3>A restaurant identity carried across print.</h3>
-              <p>Dream Studio Print redesigned the restaurant's branding across key customer touchpoints, including the menu and supporting collateral.</p>
-              <span class="project-services">Branding · Menu design · Print collateral</span>
-            </div>
-          </article>
-
-          <article class="project reveal">
-            <div class="project-media card-pair">
-              <img src="hib-card-1.webp" alt="Front of Haveli catering business card" loading="lazy">
-              <img src="hib-card-2.webp" alt="Back of Haveli catering business card" loading="lazy">
-            </div>
-            <div class="project-copy">
-              <p class="project-tag">Haveli Catering</p>
-              <h3>Business cards designed as part of the wider brand system.</h3>
-              <p>Compact, branded and built to keep the same visual language across client-facing materials.</p>
-              <span class="project-services">Business cards · Branding</span>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="about" aria-labelledby="about-title">
-      <div class="shell about-grid">
-        <div class="about-logo reveal">
-          <div class="about-brand-card">
-            <span class="about-brand-kicker">Dream Studio Print</span>
-            <strong>Ideas made<br>visible.</strong>
-            <span>Printing · Packaging · Branding</span>
-          </div>
-        </div>
-        <div class="about-copy reveal">
-          <p class="eyebrow">About Dream Studio Print</p>
-          <h2 id="about-title">One place for the pieces that make a business look like a brand.</h2>
-          <p>Dream Studio Print helps businesses turn ideas into practical, polished print and branding materials. The focus is straightforward: clear design, reliable production and finished pieces that feel intentional.</p>
-          <p>We work with businesses across Canada and handle projects from a single print item to a coordinated brand refresh.</p>
-          <div class="about-links">
-            <a href="https://www.instagram.com/dreamstudio194/" target="_blank" rel="noopener noreferrer">Instagram @dreamstudio194</a>
-            <a href="tel:+14383379508">Call 438-337-9508</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-quote" id="quote" aria-labelledby="quote-title">
-      <div class="shell quote-grid">
-        <div class="quote-copy reveal">
-          <p class="eyebrow">Get a quote</p>
-          <h2 id="quote-title">Tell us what you need. We’ll take it from there.</h2>
-          <p>Share the basics and send your project details directly to Dream Studio Print. We’ll reply by email or phone to confirm specifications, artwork and pricing.</p>
-          <div class="contact-stack">
-            <a href="tel:+14383379508"><span>Phone</span><strong>438-337-9508</strong></a>
-            <a href="mailto:dreamstudio194@gmail.com"><span>Email</span><strong>dreamstudio194@gmail.com</strong></a>
-            <a href="https://www.instagram.com/dreamstudio194/" target="_blank" rel="noopener noreferrer"><span>Instagram</span><strong>@dreamstudio194</strong></a>
-          </div>
-        </div>
-
-        <form class="quote-form reveal" id="quote-form" novalidate>
-          <div class="form-row">
-            <label>Full name<input type="text" name="name" autocomplete="name" required></label>
-            <label>Business name<input type="text" name="business" autocomplete="organization"></label>
-          </div>
-          <div class="form-row">
-            <label>Email<input type="email" name="email" autocomplete="email" required></label>
-            <label>Phone<input type="tel" name="phone" autocomplete="tel"></label>
-          </div>
-          <div class="form-row">
-            <label>City / Province<input type="text" name="location" placeholder="e.g. Surrey, BC" required></label>
-            <label>Service
-              <select name="service" required>
-                <option value="">Choose one</option>
-                <option>Branding & graphic design</option>
-                <option>Business cards & stationery</option>
-                <option>Menus, flyers & brochures</option>
-                <option>Signs, banners & large format</option>
-                <option>Packaging, labels & stickers</option>
-                <option>Premium finishing</option>
-                <option>Other / multiple services</option>
-              </select>
-            </label>
-          </div>
-          <div class="form-row">
-            <label>Estimated quantity<input type="text" name="quantity" placeholder="e.g. 500 cards"></label>
-            <label>Preferred timing<input type="text" name="timing" placeholder="e.g. within 2 weeks"></label>
-          </div>
-          <label>Project details<textarea name="message" rows="6" placeholder="Tell us the size, quantity, finish, deadline or anything else that will help us quote accurately." required></textarea></label>
-          <label class="hp-field" aria-hidden="true">Company website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-          <button class="button button-primary button-full" type="submit">Send Quote Request</button>
-          <p class="form-note" id="form-status" role="status">No public street address is listed. Dream Studio Print serves businesses across Canada.</p>
-        </form>
-      </div>
-    </section>
-
-    <section class="section section-tight" aria-labelledby="faq-title">
-      <div class="shell faq-wrap">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Quick answers</p>
-          <h2 id="faq-title">Before you request a quote.</h2>
-        </div>
-        <div class="faq-list">
-          <details class="reveal"><summary>Do you work with businesses outside your local area?</summary><p>Yes. Dream Studio Print is positioned to work with businesses across Canada. Shipping, delivery and timing are confirmed during quoting.</p></details>
-          <details class="reveal"><summary>Can you design and print the same project?</summary><p>Yes. Dream Studio Print offers both design and production, which helps keep artwork and finished print consistent.</p></details>
-          <details class="reveal"><summary>Can I send my own artwork?</summary><p>Yes. If you already have artwork, include that in your email after preparing your quote request. Print-readiness can be reviewed before production.</p></details>
-          <details class="reveal"><summary>Do you offer premium business card finishes?</summary><p>Yes. Options include standard cards, laminated finishes and premium foil work, depending on the project.</p></details>
-        </div>
-      </div>
+        <label class="full-field">Project details<textarea name="message" rows="5" placeholder="Size, quantity, finish, deadline, artwork status or anything else that helps us quote accurately." required></textarea></label>
+        <label class="hp-field" aria-hidden="true">Company website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        <button class="submit-button" type="submit"><span>Send Quote Request</span><b>↗</b></button>
+        <p class="form-status" id="form-status" role="status">Serving businesses across Canada.</p>
+      </form>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="shell footer-grid">
-      <div>
-        <p class="footer-brand">Dream Studio Print</p>
-        <p>Printing · Packaging · Branding<br>Serving businesses across Canada.</p>
-      </div>
-      <div class="footer-links">
-        <a href="#services">Services</a>
-        <a href="#work">Our Work</a>
-        <a href="#quote">Get a Quote</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-      </div>
-      <div class="footer-contact">
-        <a href="tel:+14383379508">438-337-9508</a>
-        <a href="mailto:dreamstudio194@gmail.com">dreamstudio194@gmail.com</a>
-        <a href="https://www.instagram.com/dreamstudio194/" target="_blank" rel="noopener noreferrer">@dreamstudio194</a>
-      </div>
+    <div>
+      <strong>Dream Studio Print</strong>
+      <span>Printing · Packaging · Branding</span>
     </div>
-    <div class="shell footer-bottom">
-      <span>© <span id="year"></span> Dream Studio Print</span>
-      <span>Make it happen.</span>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/dreamstudio194/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
     </div>
+    <div class="footer-bottom"><span>© <span id="year"></span> Dream Studio Print</span><span>Make it happen.</span></div>
   </footer>
+
+  <a class="whatsapp-float" href="https://wa.me/14383379508?text=Hi%20Dream%20Studio%20Print%2C%20I'd%20like%20to%20discuss%20a%20printing%20project." target="_blank" rel="noopener noreferrer" aria-label="Chat with Dream Studio Print on WhatsApp">WhatsApp</a>
 
   <aside class="cookie-banner" id="cookie-banner" aria-label="Analytics preferences" hidden>
     <p><strong>Privacy choices.</strong> This site can use privacy-friendly analytics to understand visits. Essential site functions work without analytics.</p>
     <div>
-      <button class="button button-ghost button-small" id="analytics-decline">Essential only</button>
-      <button class="button button-primary button-small" id="analytics-accept">Allow analytics</button>
+      <button type="button" id="analytics-decline">Essential only</button>
+      <button type="button" id="analytics-accept">Allow analytics</button>
     </div>
   </aside>
+
+  <div class="product-viewer" id="product-viewer" aria-hidden="true">
+    <div class="viewer-shell" id="viewer-shell" role="dialog" aria-modal="true" aria-labelledby="viewer-title">
+      <button class="viewer-close" id="viewer-close" type="button" aria-label="Close product showcase">Close</button>
+      <section class="viewer-hero">
+        <img id="viewer-hero-image" src="" alt="">
+        <div class="viewer-hero-shade"></div>
+        <div class="viewer-hero-copy">
+          <p id="viewer-number"></p>
+          <h2 id="viewer-title"></h2>
+          <span id="viewer-tagline"></span>
+        </div>
+      </section>
+      <section class="viewer-content">
+        <div class="viewer-copy-grid">
+          <p class="kicker">Product options</p>
+          <div>
+            <h3 id="viewer-heading"></h3>
+            <p id="viewer-description"></p>
+          </div>
+        </div>
+        <div class="spec-grid" id="viewer-specs"></div>
+        <div class="viewer-gallery">
+          <figure><img id="viewer-gallery-1" src="" alt=""></figure>
+          <figure><img id="viewer-gallery-2" src="" alt=""></figure>
+        </div>
+        <div class="viewer-cta">
+          <p>Have something specific in mind?</p>
+          <a href="#quote" id="viewer-quote-link">Request a quote <span>↗</span></a>
+        </div>
+      </section>
+    </div>
+  </div>
 
   <script src="script.js" defer></script>
 </body>
