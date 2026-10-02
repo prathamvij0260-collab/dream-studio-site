@@ -86,8 +86,8 @@
       tagline: 'Small format. Strong first impression.',
       heading: 'From everyday cards to premium pieces worth keeping.',
       description: 'Choose a practical standard stock or push the finish further with lamination, thicker cards, foil and specialty details. Artwork can be supplied or prepared by Dream Studio Print.',
-      hero: 'assets/business-cards.webp',
-      gallery: ['assets/business-cards-alt.webp', 'assets/branding-alt.webp'],
+      hero: 'business-cards.webp',
+      gallery: ['business-cards-alt.webp', 'branding-alt.webp'],
       specs: ['14 pt standard', '16 pt matte / gloss', '20 pt / 32 pt premium', 'Foil & specialty finishes']
     },
     menus: {
@@ -96,8 +96,8 @@
       tagline: 'Designed to be read, handled and remembered.',
       heading: 'Menus that carry the restaurant brand all the way to the table.',
       description: 'Dine-in menus, takeout menus, folded formats and premium menu presentation. Layout, hierarchy and finishing are built around how the menu will actually be used.',
-      hero: 'assets/menus.webp',
-      gallery: ['assets/menus-alt.webp', 'assets/branding.webp'],
+      hero: 'menus.webp',
+      gallery: ['menus-alt.webp', 'branding.webp'],
       specs: ['Dine-in menus', 'Takeout menus', 'Folded & multi-panel', 'Premium menu covers']
     },
     flyers: {
@@ -106,8 +106,8 @@
       tagline: 'Get the message into someone’s hands.',
       heading: 'Promotional print with a clear job to do.',
       description: 'From a single event flyer to multi-panel brochures and promotional handouts, the focus stays on hierarchy, readability and a finish that fits the campaign.',
-      hero: 'assets/flyers.webp',
-      gallery: ['assets/flyers-alt.webp', 'assets/labels-alt.webp'],
+      hero: 'flyers.webp',
+      gallery: ['flyers-alt.webp', 'labels-alt.webp'],
       specs: ['Single-sheet flyers', 'Bi-fold & tri-fold', 'Promotional cards', 'Posters & handouts']
     },
     labels: {
@@ -116,8 +116,8 @@
       tagline: 'Brand the surface. Keep the identity moving.',
       heading: 'Labels and stickers made for products, packaging and promotion.',
       description: 'Custom shapes, product labels, promotional stickers and branded seals. We can help prepare artwork so the final cut, bleed and finish work cleanly.',
-      hero: 'assets/labels.webp',
-      gallery: ['assets/labels-alt.webp', 'assets/packaging-alt.webp'],
+      hero: 'labels.webp',
+      gallery: ['labels-alt.webp', 'packaging-alt.webp'],
       specs: ['Die-cut stickers', 'Product labels', 'Roll labels', 'Custom shapes & sizes']
     },
     packaging: {
@@ -126,8 +126,8 @@
       tagline: 'The brand should still feel like the brand after checkout.',
       heading: 'Packaging that keeps the experience consistent.',
       description: 'Branded bags, boxes, sleeves and supporting printed pieces can be developed as one coordinated system instead of unrelated items.',
-      hero: 'assets/packaging.webp',
-      gallery: ['assets/packaging-alt.webp', 'assets/branding-alt.webp'],
+      hero: 'packaging.webp',
+      gallery: ['packaging-alt.webp', 'branding-alt.webp'],
       specs: ['Paper bags', 'Custom boxes', 'Sleeves & inserts', 'Branded tissue & cards']
     },
     signage: {
@@ -136,8 +136,8 @@
       tagline: 'Make the message work from across the room — or across the street.',
       heading: 'Large-format pieces built for storefronts, events and promotions.',
       description: 'Roll-up banners, window graphics, decals, vinyl and display pieces that stay readable at scale and hold together with the rest of the brand.',
-      hero: 'assets/signage.webp',
-      gallery: ['assets/signage-alt.webp', 'assets/flyers.webp'],
+      hero: 'signage.webp',
+      gallery: ['signage-alt.webp', 'flyers.webp'],
       specs: ['Roll-up banners', 'Window graphics', 'Vinyl & decals', 'Event & display graphics']
     },
     branding: {
@@ -146,8 +146,8 @@
       tagline: 'Build the system before you print the pieces.',
       heading: 'A visual direction that can move from screen to print without falling apart.',
       description: 'Logo development, brand refreshes, campaign artwork and print-ready systems. The goal is practical consistency across the things customers actually see.',
-      hero: 'assets/branding.webp',
-      gallery: ['assets/branding-alt.webp', 'assets/packaging.webp'],
+      hero: 'branding.webp',
+      gallery: ['branding-alt.webp', 'packaging.webp'],
       specs: ['Logo & identity', 'Brand refresh', 'Campaign artwork', 'Print-ready design systems']
     },
     finishes: {
@@ -156,8 +156,8 @@
       tagline: 'The details people notice when they pick it up.',
       heading: 'Use finish, texture and weight to make print feel intentional.',
       description: 'Lamination, foil, embossing and heavier stocks can turn a standard printed piece into something that feels more considered and more premium.',
-      hero: 'assets/finishes.webp',
-      gallery: ['assets/finishes-alt.webp', 'assets/business-cards.webp'],
+      hero: 'finishes.webp',
+      gallery: ['finishes-alt.webp', 'business-cards.webp'],
       specs: ['Matte & gloss lamination', 'Foil options', 'Emboss / deboss', 'Heavy premium stocks']
     }
   };
