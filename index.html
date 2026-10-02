@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Dream Studio Print | Printing, Packaging & Branding Across Canada</title>
-  <meta name="description" content="Dream Studio Print helps businesses across Canada with printing, packaging, branding, business cards, menus, flyers, signage, labels, banners and premium finishes.">
+  <meta name="description" content="Dream Studio Print helps businesses across Canada with printing, packaging, branding, business cards, menus, flyers, signage, labels, stationery and premium finishes.">
   <meta name="theme-color" content="#0b0b0b">
   <meta name="robots" content="index,follow">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -12,8 +12,9 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Dream Studio Print — Make it happen.">
   <meta property="og:description" content="Printing, packaging and branding for businesses across Canada.">
-  <meta property="og:image" content="https://dream-studio-site.vercel.app/branding.webp">
+  <meta property="og:image" content="https://dream-studio-site.vercel.app/studio-cover.webp">
   <meta property="og:url" content="https://dream-studio-site.vercel.app/">
+  <link rel="preload" href="studio-cover.webp" as="image" type="image/webp">
   <link rel="preload" href="business-cards.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="styles.css">
   <script type="application/ld+json">
@@ -34,7 +35,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header" id="site-header">
-    <a class="header-brand" href="#top" aria-label="Dream Studio Print home">Dream Studio Print</a>
+    <a class="header-brand" id="header-brand" href="#top" aria-label="Dream Studio Print home">Dream Studio Print</a>
     <button class="menu-button" id="menu-button" aria-expanded="false" aria-controls="menu-panel">Menu</button>
   </header>
 
@@ -53,104 +54,130 @@
 
   <main id="main">
     <section class="opening" id="top" aria-labelledby="opening-title">
-      <h1 id="opening-title">Dream Studio Print</h1>
+      <div class="opening-stage">
+        <h1 id="opening-title"><span>Dream Studio</span><span>Print</span></h1>
+        <p class="opening-hint">Scroll to explore <i aria-hidden="true"></i></p>
+      </div>
     </section>
 
     <section class="printer-section" id="printer" aria-labelledby="printer-title">
       <div class="printer-stage">
         <div class="printer-copy">
-          <p>From screen to print</p>
+          <p class="kicker">From screen to print</p>
           <h2 id="printer-title">Watch the idea<br>come off the press.</h2>
         </div>
 
-        <div class="printer-illustration" aria-hidden="true">
+        <div class="printer-wrap" aria-hidden="true">
           <div class="printer-back"></div>
-          <div class="printer-body">
-            <span class="printer-name">Dream Studio Print</span>
-            <div class="printer-lights"><i></i><i></i><i></i></div>
-            <div class="print-slot"><span></span></div>
-          </div>
-          <div class="paper-track">
-            <div class="paper-sheet">
-              <strong>Make it<br>happen.</strong>
-              <div class="spectrum"></div>
-              <small>Printing · Packaging · Branding</small>
+          <div class="printer-sheet">
+            <div class="sheet-inner">
+              <span class="sheet-small">DREAM STUDIO PRINT</span>
+              <strong>MAKE IT<br>HAPPEN.</strong>
+              <div class="sheet-spectrum"></div>
+              <p>PRINTING · PACKAGING · BRANDING</p>
+              <div class="sheet-grid"><span></span><span></span><span></span><span></span></div>
             </div>
           </div>
-          <div class="printer-legs"><i></i><i></i></div>
+          <div class="printer-body">
+            <div class="printer-name">DREAM STUDIO PRINT</div>
+            <div class="printer-panel"><i></i><i></i><i></i></div>
+            <div class="printer-slot"></div>
+            <div class="print-head"></div>
+          </div>
+          <div class="printer-stand"><i></i><i></i></div>
         </div>
+
+        <p class="print-finish">Designed. Printed. Finished.</p>
+      </div>
+    </section>
+
+    <section class="work-cover" aria-label="Featured print portfolio cover">
+      <img src="studio-cover.webp" alt="Creative director reviewing a coordinated set of premium printed materials in a dark design studio">
+      <div class="work-cover-shade"></div>
+      <div class="work-cover-copy">
+        <p>Featured print · 2026</p>
+        <h2>Print deserves<br>a proper presentation.</h2>
+        <span>Concept imagery created to show the range and finish of the products we can produce.</span>
       </div>
     </section>
 
     <section class="work-section" id="work" aria-labelledby="work-title">
       <div class="work-intro">
-        <p class="kicker">Explore the studio</p>
-        <h2 id="work-title">Products made to be seen.</h2>
-        <p>Scroll through the collection. Tap any product to open its full showcase.</p>
+        <p class="kicker">Featured projects</p>
+        <h2 id="work-title">Explore the collection.</h2>
+        <p>Each concept uses a hypothetical brand so you can focus on the product, material and finish. Tap a project to open its full showcase.</p>
       </div>
 
       <div class="project-list" id="project-list">
         <article class="project-row" data-product="business-cards">
           <button class="project-card" type="button" aria-label="Open Business Cards showcase">
             <span class="project-index">01</span>
-            <figure><img src="business-cards.webp" alt="Premium printed business cards for a restaurant brand"></figure>
-            <div class="project-title"><span>Business Cards</span><em>Open project</em></div>
+            <figure><img src="business-cards.webp" alt="Northline Studio premium black and cream business card collection"></figure>
+            <div class="project-title"><span>Business Cards</span><em>Northline Studio</em></div>
+            <div class="project-meta"><span>2026</span><span>Print</span></div>
+          </button>
+        </article>
+
+        <article class="project-row project-row-right" data-product="flyers">
+          <button class="project-card" type="button" aria-label="Open Flyers and Brochures showcase">
+            <span class="project-index">02</span>
+            <figure><img src="flyers.webp" alt="Bean and Bloom Cafe flyer and brochure collection"></figure>
+            <div class="project-title"><span>Flyers &amp; Brochures</span><em>Bean &amp; Bloom</em></div>
+            <div class="project-meta"><span>2026</span><span>Print</span></div>
+          </button>
+        </article>
+
+        <article class="project-row" data-product="stationery">
+          <button class="project-card" type="button" aria-label="Open Stationery showcase">
+            <span class="project-index">03</span>
+            <figure><img src="stationery.webp" alt="Aster and Co coordinated stationery and brand identity set"></figure>
+            <div class="project-title"><span>Stationery</span><em>Aster &amp; Co.</em></div>
+            <div class="project-meta"><span>2026</span><span>Print</span></div>
           </button>
         </article>
 
         <article class="project-row project-row-right" data-product="menus">
           <button class="project-card" type="button" aria-label="Open Menus showcase">
-            <span class="project-index">02</span>
-            <figure><img src="menus.webp" alt="Restaurant menu held up for presentation"></figure>
-            <div class="project-title"><span>Menus</span><em>Open project</em></div>
-          </button>
-        </article>
-
-        <article class="project-row" data-product="flyers">
-          <button class="project-card" type="button" aria-label="Open Flyers and Brochures showcase">
-            <span class="project-index">03</span>
-            <figure><img src="flyers.webp" alt="Assorted flyers, brochures and printed promotional materials"></figure>
-            <div class="project-title"><span>Flyers &amp; Brochures</span><em>Open project</em></div>
-          </button>
-        </article>
-
-        <article class="project-row project-row-right" data-product="labels">
-          <button class="project-card" type="button" aria-label="Open Stickers and Labels showcase">
             <span class="project-index">04</span>
-            <figure><img src="labels.webp" alt="Custom die-cut sticker sheet"></figure>
-            <div class="project-title"><span>Stickers &amp; Labels</span><em>Open project</em></div>
+            <figure><img src="menus.webp" alt="Saffron Table premium restaurant menu collection"></figure>
+            <div class="project-title"><span>Menus</span><em>Saffron Table</em></div>
+            <div class="project-meta"><span>2026</span><span>Print</span></div>
           </button>
         </article>
 
-        <article class="project-row" data-product="packaging">
-          <button class="project-card" type="button" aria-label="Open Packaging and Bags showcase">
+        <article class="project-row" data-product="labels">
+          <button class="project-card" type="button" aria-label="Open Stickers and Labels showcase">
             <span class="project-index">05</span>
-            <figure><img src="packaging.webp" alt="Branded retail paper bags"></figure>
-            <div class="project-title"><span>Packaging &amp; Bags</span><em>Open project</em></div>
+            <figure><img src="labels.webp" alt="Harvest and Co product labels, roll labels and sticker sheet"></figure>
+            <div class="project-title"><span>Stickers &amp; Labels</span><em>Harvest &amp; Co.</em></div>
+            <div class="project-meta"><span>2026</span><span>Print</span></div>
           </button>
         </article>
 
-        <article class="project-row project-row-right" data-product="signage">
-          <button class="project-card" type="button" aria-label="Open Signage and Large Format showcase">
+        <article class="project-row project-row-right" data-product="packaging">
+          <button class="project-card" type="button" aria-label="Open Packaging showcase">
             <span class="project-index">06</span>
-            <figure><img src="signage.webp" alt="Restaurant sidewalk sign and storefront graphics"></figure>
-            <div class="project-title"><span>Signage &amp; Large Format</span><em>Open project</em></div>
+            <figure><img src="packaging.webp" alt="Luna Bakehouse branded paper bags, boxes and food packaging"></figure>
+            <div class="project-title"><span>Packaging</span><em>Luna Bakehouse</em></div>
+            <div class="project-meta"><span>2026</span><span>Print</span></div>
           </button>
         </article>
 
-        <article class="project-row" data-product="branding">
-          <button class="project-card" type="button" aria-label="Open Branding showcase">
+        <article class="project-row" data-product="signage">
+          <button class="project-card" type="button" aria-label="Open Signage and Large Format showcase">
             <span class="project-index">07</span>
-            <figure><img src="branding.webp" alt="Coordinated branded print products presented in a print studio"></figure>
-            <div class="project-title"><span>Branding</span><em>Open project</em></div>
+            <figure><img src="signage.webp" alt="Coastline Realty roll-up banner, poster and display signage"></figure>
+            <div class="project-title"><span>Signage &amp; Large Format</span><em>Coastline Realty</em></div>
+            <div class="project-meta"><span>2026</span><span>Large format</span></div>
           </button>
         </article>
 
         <article class="project-row project-row-right" data-product="finishes">
           <button class="project-card" type="button" aria-label="Open Premium Finishes showcase">
             <span class="project-index">08</span>
-            <figure><img src="finishes.webp" alt="Premium finished print product shown close up"></figure>
-            <div class="project-title"><span>Premium Finishes</span><em>Open project</em></div>
+            <figure><img src="finishes.webp" alt="Maison Elan foil, embossing and textured premium print samples"></figure>
+            <div class="project-title"><span>Premium Finishes</span><em>Maison Élan</em></div>
+            <div class="project-meta"><span>2026</span><span>Specialty</span></div>
           </button>
         </article>
       </div>
@@ -159,7 +186,7 @@
     <section class="quote-section" id="quote" aria-labelledby="quote-title">
       <div class="quote-heading">
         <p class="kicker">Start a project</p>
-        <h2 id="quote-title">Tell us what you need.<br>We’ll take it from there.</h2>
+        <h2 id="quote-title"><span>Tell us what</span><span>you need.</span><span>We’ll take it</span><span>from there.</span></h2>
         <div class="quick-contact">
           <a href="https://wa.me/14383379508?text=Hi%20Dream%20Studio%20Print%2C%20I'd%20like%20to%20discuss%20a%20printing%20project." target="_blank" rel="noopener noreferrer">WhatsApp</a>
           <a href="tel:+14383379508">Call</a>
@@ -178,12 +205,12 @@
             <select name="service" required>
               <option value="">Choose one</option>
               <option>Business cards</option>
-              <option>Menus</option>
               <option>Flyers & brochures</option>
+              <option>Stationery</option>
+              <option>Menus</option>
               <option>Stickers & labels</option>
-              <option>Packaging & bags</option>
+              <option>Packaging</option>
               <option>Signage & large format</option>
-              <option>Branding & graphic design</option>
               <option>Premium finishing</option>
               <option>Other / multiple services</option>
             </select>
