@@ -1,22 +1,12 @@
-Dream Studio Print V3.2 — smoother opening animation
+Dream Studio Print V2.1 responsive polish
 
-Replace only:
+Replace only these two files in the repository root:
+- styles.css
 - script.js
-- experience.css
 
-What changed:
-- The opening animation now smooths raw scroll input with requestAnimationFrame damping.
-- Sitting -> rising -> standing uses continuous eased crossfades instead of abrupt opacity windows.
-- Walking frames blend continuously instead of switching on/off.
-- Horizontal walking uses eased movement.
-- A very small walking bob makes the gait feel less mechanical.
-- The opening has more scroll distance so standing up doesn't happen too quickly.
-- GPU-friendly translate3d/backface settings reduce visual jitter.
-
-No image files need to be replaced for this update.
-
-After upload:
-1. Commit.
-2. Wait for Vercel Ready.
-3. Hard refresh with Ctrl+Shift+R.
-4. Test the first animation with a slow scroll.
+Fixes:
+- smaller desktop fullscreen menu, phone menu unchanged in feel
+- desktop portfolio cover crop moved upward so the model/head is not cut off
+- Designed / Printed / Finished badge moved above the printer on mobile and made more legible
+- opening DREAM STUDIO PRINT transition slowed down, extended, and damped for smoother motion
+- mobile printer heading moved slightly lower to avoid header overlap

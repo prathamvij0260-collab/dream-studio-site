@@ -8,38 +8,91 @@
   const header=$('#site-header'), headerBrand=$('#header-brand'), opening=$('.opening'), title=$('#opening-title'), hint=$('.opening-hint');
   const printer=$('.printer-section'), sheet=$('.printer-sheet'), printHead=$('.print-head'), printCopy=$('.printer-copy'), finish=$('.print-finish');
 
-  function renderScroll(){
+  let openingTarget=0;
+  let openingCurrent=null;
+  let openingAnimating=false;
+
+  function applyOpening(p){
+    if(!opening || !title) return;
     const vh=Math.max(innerHeight,1), vw=Math.max(innerWidth,1);
+
+    if(!reduceMotion){
+      const naturalW=Math.max(title.offsetWidth,1);
+      const target=headerBrand?.getBoundingClientRect();
+      const scale=target?clamp(target.width/naturalW,.09,.22):.14;
+      const startX=vw/2, startY=vh/2;
+      const targetX=target?target.left+target.width/2:70;
+      const targetY=target?target.top+target.height/2:34;
+
+      // Spread the movement across almost the entire opening section.
+      const move=smooth(.02,.96,p);
+      const tx=(targetX-startX)*move;
+      const ty=(targetY-startY)*move;
+      const sc=1-(1-scale)*move;
+      title.style.transform=`translate3d(${tx}px,${ty}px,0) scale(${sc})`;
+      title.style.opacity=String(1-smooth(.90,1,p));
+      if(hint) hint.style.opacity=String(1-smooth(.04,.24,p));
+    }
+
+    if(header){
+      const o=smooth(.89,1,p);
+      header.style.opacity=String(o);
+      header.classList.toggle('ready',o>.45);
+    }
+  }
+
+  function animateOpening(){
+    if(openingCurrent===null) openingCurrent=openingTarget;
+    const delta=openingTarget-openingCurrent;
+    // Damped interpolation removes the jittery direct scroll-to-transform feel.
+    openingCurrent += delta*.085;
+    if(Math.abs(delta)<.00045) openingCurrent=openingTarget;
+    applyOpening(openingCurrent);
+
+    if(Math.abs(openingTarget-openingCurrent)>.00045){
+      requestAnimationFrame(animateOpening);
+    }else{
+      openingAnimating=false;
+    }
+  }
+
+  function renderScroll(){
+    const vh=Math.max(innerHeight,1);
+
     if(opening && title){
-      const rect=opening.getBoundingClientRect(), distance=Math.max(opening.offsetHeight-vh,1), p=clamp(-rect.top/distance);
-      if(!reduceMotion){
-        const naturalW=title.offsetWidth, naturalH=title.offsetHeight;
-        const target=headerBrand?.getBoundingClientRect();
-        const scale=target?clamp(target.width/naturalW,.09,.22):.14;
-        const startX=vw/2, startY=vh/2;
-        const targetX=target?target.left+target.width/2:70;
-        const targetY=target?target.top+target.height/2:34;
-        const move=smooth(.04,.92,p);
-        const tx=(targetX-startX)*move, ty=(targetY-startY)*move;
-        const sc=1-(1-scale)*move;
-        title.style.transform=`translate3d(${tx}px,${ty}px,0) scale(${sc})`;
-        title.style.opacity=String(1-smooth(.78,.98,p));
-        if(hint) hint.style.opacity=String(1-smooth(.05,.28,p));
-      }
-      if(header){
-        const o=smooth(.80,.97,p); header.style.opacity=String(o); header.classList.toggle('ready',o>.45);
+      const rect=opening.getBoundingClientRect();
+      const distance=Math.max(opening.offsetHeight-vh,1);
+      openingTarget=clamp(-rect.top/distance);
+      if(openingCurrent===null) openingCurrent=openingTarget;
+
+      if(reduceMotion){
+        openingCurrent=openingTarget;
+        applyOpening(openingCurrent);
+      }else if(!openingAnimating){
+        openingAnimating=true;
+        requestAnimationFrame(animateOpening);
       }
     }
+
     if(printer && !reduceMotion){
       const rect=printer.getBoundingClientRect(), distance=Math.max(printer.offsetHeight-vh,1), p=clamp(-rect.top/distance);
       const paper=clamp((p-.08)/.64), y=-62+paper*88;
       if(sheet) sheet.style.transform=`translate3d(-50%,${y}%,0)`;
       const ci=clamp((p-.05)/.20); if(printCopy){printCopy.style.opacity=String(ci);printCopy.style.transform=`translateY(${(1-ci)*24}px)`}
       const hp=clamp((p-.08)/.60), hx=-72+hp*144; if(printHead){printHead.style.transform=`translateX(${hx}%)`;printHead.style.opacity=String(hp>0&&hp<1?1:.25)}
-      const fi=clamp((p-.73)/.18); if(finish){finish.style.opacity=String(fi); if(innerWidth>900) finish.style.transform=`translateY(${(1-fi)*16}px)`}
+      const fi=smooth(.60,.76,p); if(finish){finish.style.opacity=String(fi); if(innerWidth>900) finish.style.transform=`translateY(${(1-fi)*16}px)`}
     }
   }
-  let tick=false; addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(()=>{renderScroll();tick=false})}},{passive:true}); addEventListener('resize',renderScroll); renderScroll();
+
+  let tick=false;
+  addEventListener('scroll',()=>{
+    if(!tick){
+      tick=true;
+      requestAnimationFrame(()=>{renderScroll();tick=false});
+    }
+  },{passive:true});
+  addEventListener('resize',()=>{openingCurrent=null;renderScroll()});
+  renderScroll();
 
   const menuButton=$('#menu-button'), menuPanel=$('#menu-panel');
   const closeMenu=()=>{menuPanel?.classList.remove('open');menuPanel?.setAttribute('aria-hidden','true');menuButton?.setAttribute('aria-expanded','false');if(menuButton)menuButton.textContent='Menu';document.body.classList.remove('menu-open')};
