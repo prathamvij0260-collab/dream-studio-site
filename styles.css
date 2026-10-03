@@ -66,3 +66,83 @@
 @media(max-width:520px){
   .print-finish{top:30vh;font-size:.61rem}
 }
+
+
+/* =========================================================
+   V3 — Devco-inspired portfolio variety + opening backdrop
+   ========================================================= */
+.opening-stage{background:#050505;isolation:isolate}
+.opening-backdrop{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.opening-backdrop span{position:absolute;font-family:var(--sans);font-weight:950;text-transform:uppercase;letter-spacing:-.085em;line-height:.72;color:rgba(255,255,255,.035);white-space:nowrap;user-select:none}
+.opening-backdrop span:nth-child(1){font-size:clamp(11rem,25vw,30rem);left:-3vw;top:-5vh}
+.opening-backdrop span:nth-child(2){font-size:clamp(12rem,27vw,32rem);right:-6vw;top:29vh}
+.opening-backdrop span:nth-child(3){font-size:clamp(9rem,21vw,26rem);left:-10vw;top:58vh}
+.opening-backdrop span:nth-child(4){font-size:clamp(8rem,18vw,22rem);right:-8vw;bottom:-6vh}
+.opening h1,.opening-hint{position:relative;z-index:2}
+.opening h1{text-shadow:0 12px 46px rgba(0,0,0,.42)}
+
+/* New portfolio covers are landscape product photography. */
+.project-card figure{aspect-ratio:4/3}
+.project-card img{object-position:center}
+.project-title em{color:#9d9891}
+
+/* Each project has its own visual atmosphere instead of one repeated template. */
+.product-viewer{--viewer-bg:#0b0b0b;--viewer-fg:#f7f2ea;--viewer-muted:#aaa;--viewer-line:rgba(255,255,255,.14);--viewer-card:#171717}
+.product-viewer[data-product="business-cards"]{--viewer-bg:#090909;--viewer-fg:#f5efe6;--viewer-muted:#a9a39a;--viewer-line:rgba(255,255,255,.15);--viewer-card:#151515}
+.product-viewer[data-product="flyers"]{--viewer-bg:#102019;--viewer-fg:#f3eadb;--viewer-muted:#bac0b6;--viewer-line:rgba(243,234,219,.16);--viewer-card:#16271f}
+.product-viewer[data-product="stationery"]{--viewer-bg:#ece6da;--viewer-fg:#191915;--viewer-muted:#6d675e;--viewer-line:rgba(20,20,18,.15);--viewer-card:#ded6c8}
+.product-viewer[data-product="wedding"]{--viewer-bg:#efe4da;--viewer-fg:#2b211d;--viewer-muted:#776b64;--viewer-line:rgba(58,42,34,.15);--viewer-card:#e6d7ca}
+.product-viewer[data-product="real-estate"]{--viewer-bg:#101823;--viewer-fg:#f4f1ea;--viewer-muted:#aab4c0;--viewer-line:rgba(230,237,245,.15);--viewer-card:#172331}
+.product-viewer[data-product="postcards"]{--viewer-bg:#eadcc5;--viewer-fg:#17201e;--viewer-muted:#6e6c62;--viewer-line:rgba(23,32,30,.16);--viewer-card:#dfcfb4}
+.product-viewer[data-product="magazine-books"]{--viewer-bg:#151311;--viewer-fg:#f0eadf;--viewer-muted:#aaa197;--viewer-line:rgba(240,234,223,.15);--viewer-card:#211e1a}
+.viewer-content{background:var(--viewer-bg);color:var(--viewer-fg)}
+.viewer-copy-grid>div p{color:var(--viewer-muted)}
+.viewer-content .kicker{color:var(--viewer-muted)}
+.viewer-content .spec-grid{border-color:var(--viewer-line)}
+.viewer-content .spec-card{border-color:var(--viewer-line)}
+.viewer-content .spec-card span{color:var(--viewer-muted)}
+.viewer-content .viewer-cta{border-color:var(--viewer-line)}
+.viewer-content .viewer-cta a{border-color:var(--viewer-fg);color:var(--viewer-fg)}
+.viewer-gallery{gap:22px}
+.viewer-gallery figure{background:var(--viewer-card);aspect-ratio:4/3;border-radius:3px}
+.viewer-gallery img{object-fit:cover}
+.viewer-gallery figure:nth-child(2){margin-top:0}
+
+/* Business cards: offset editorial grid. */
+.gallery-business-cards{grid-template-columns:1.2fr .8fr}
+.gallery-business-cards figure:nth-child(2){margin-top:9vh}
+.gallery-business-cards figure:nth-child(3){margin-top:-2vh}
+.gallery-business-cards figure:nth-child(4){margin-top:7vh}
+/* Flyers: campaign wall feel with a wide lead image. */
+.gallery-flyers{grid-template-columns:1fr 1fr}
+.gallery-flyers figure:first-child{grid-column:1/-1;aspect-ratio:16/9}
+.gallery-flyers figure:nth-child(4){grid-column:1/-1;aspect-ratio:16/9;width:78%;justify-self:end}
+/* Stationery: clean balanced grid. */
+.gallery-stationery{grid-template-columns:1fr 1fr;gap:34px}
+.gallery-stationery figure{aspect-ratio:4/3}
+/* Wedding: softer stagger with breathing room. */
+.gallery-wedding{grid-template-columns:1fr 1fr;gap:42px 28px;max-width:1250px}
+.gallery-wedding figure:nth-child(2),.gallery-wedding figure:nth-child(4){transform:translateY(7vh)}
+/* Real estate: one cinematic wide image plus three supporting frames. */
+.gallery-real-estate{grid-template-columns:repeat(3,1fr)}
+.gallery-real-estate figure:first-child{grid-column:1/-1;aspect-ratio:16/9}
+.gallery-real-estate figure:not(:first-child){aspect-ratio:4/3}
+/* Postcards: compact card wall. */
+.gallery-postcards{grid-template-columns:repeat(4,1fr);gap:14px}
+.gallery-postcards figure{aspect-ratio:3/4}
+/* Magazine/books: long-form editorial scale. */
+.gallery-magazine-books{grid-template-columns:1.35fr .65fr}
+.gallery-magazine-books figure:first-child,.gallery-magazine-books figure:nth-child(4){aspect-ratio:16/10}
+.gallery-magazine-books figure:nth-child(2){margin-top:8vh}
+.gallery-magazine-books figure:nth-child(3){margin-top:-4vh}
+
+@media(max-width:900px){
+  .opening-backdrop span:nth-child(1){font-size:38vw;left:-12vw;top:6vh}
+  .opening-backdrop span:nth-child(2){font-size:42vw;right:-18vw;top:34vh}
+  .opening-backdrop span:nth-child(3){font-size:32vw;left:-18vw;top:62vh}
+  .opening-backdrop span:nth-child(4){font-size:28vw;right:-14vw;bottom:2vh}
+  .project-card figure{aspect-ratio:4/3}
+  .viewer-gallery,.gallery-business-cards,.gallery-flyers,.gallery-stationery,.gallery-wedding,.gallery-real-estate,.gallery-postcards,.gallery-magazine-books{grid-template-columns:1fr;gap:18px}
+  .viewer-gallery figure,.gallery-flyers figure:first-child,.gallery-flyers figure:nth-child(4),.gallery-real-estate figure:first-child,.gallery-magazine-books figure:first-child,.gallery-magazine-books figure:nth-child(4){grid-column:auto;width:100%;aspect-ratio:4/3;margin:0;transform:none}
+  .gallery-postcards figure{aspect-ratio:4/3}
+}
