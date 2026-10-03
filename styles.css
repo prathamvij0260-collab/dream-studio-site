@@ -80,6 +80,8 @@
 .opening-backdrop span:nth-child(4){font-size:clamp(8rem,18vw,22rem);right:-8vw;bottom:-6vh}
 .opening h1,.opening-hint{position:relative;z-index:2}
 .opening h1{text-shadow:0 12px 46px rgba(0,0,0,.42)}
+/* Visually center the two-line wordmark on desktop at first load. */
+@media(min-width:901px){.opening h1{top:clamp(70px,12svh,115px)}}
 
 /* New portfolio covers are landscape product photography. */
 .project-card figure{aspect-ratio:4/3}

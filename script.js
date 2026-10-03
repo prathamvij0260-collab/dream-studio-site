@@ -20,7 +20,8 @@
       const naturalW=Math.max(title.offsetWidth,1);
       const target=headerBrand?.getBoundingClientRect();
       const scale=target?clamp(target.width/naturalW,.09,.22):.14;
-      const startX=vw/2, startY=vh/2;
+      const titleOffset=parseFloat(getComputedStyle(title).top)||0;
+      const startX=vw/2, startY=vh/2+titleOffset;
       const targetX=target?target.left+target.width/2:70;
       const targetY=target?target.top+target.height/2:34;
 
