@@ -128,6 +128,57 @@
   $$('.project-card').forEach(card=>card.addEventListener('click',()=>{const k=card.closest('.project-row')?.dataset.product;if(k){active=card;animate(card,k)}})); close?.addEventListener('click',()=>closeViewer()); quoteLink?.addEventListener('click',e=>{e.preventDefault();closeViewer();setTimeout(()=>$('#quote')?.scrollIntoView({behavior:reduceMotion?'auto':'smooth'}),100)}); addEventListener('popstate',()=>{const k=location.hash.slice(1);products[k]?show(k,false):closeViewer(false)}); const initial=location.hash.slice(1);if(products[initial])setTimeout(()=>show(initial,false),50);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(viewer?.classList.contains('open'))closeViewer();else closeMenu()}});
 
+
+  const customerCount=$('#customer-count'), customerCountNumber=$('#customer-count-number');
+  if(customerCount&&customerCountNumber){
+    let counted=false;
+    const runCustomerCount=()=>{
+      if(counted)return;
+      counted=true;
+
+      if(reduceMotion){
+        customerCountNumber.textContent='200';
+        customerCountNumber.style.transform='scale(1)';
+        customerCount.classList.add('complete');
+        return;
+      }
+
+      const duration=1900;
+      const start=performance.now();
+      const easeOut=t=>1-Math.pow(1-t,3);
+
+      const frame=now=>{
+        const p=clamp((now-start)/duration);
+        const eased=easeOut(p);
+        const value=Math.max(1,Math.round(1+199*eased));
+        const scale=.86+(.14*eased);
+
+        customerCountNumber.textContent=String(value);
+        customerCountNumber.style.transform=`scale(${scale})`;
+
+        if(p<1){
+          requestAnimationFrame(frame);
+        }else{
+          customerCountNumber.textContent='200';
+          customerCountNumber.style.transform='scale(1)';
+          customerCount.classList.add('complete','boom');
+          setTimeout(()=>customerCount.classList.remove('boom'),900);
+        }
+      };
+
+      requestAnimationFrame(frame);
+    };
+
+    const customerObserver=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){
+        runCustomerCount();
+        customerObserver.disconnect();
+      }
+    },{threshold:.45});
+
+    customerObserver.observe(customerCount);
+  }
+
   const form=$('#quote-form'), status=$('#form-status'); form?.addEventListener('submit',async e=>{e.preventDefault();const b=$('.submit-button',form),data=Object.fromEntries(new FormData(form).entries());if(!data.name||!data.email||!data.location||!data.service||!data.message){status.textContent='Please complete all required fields.';return}b.disabled=true;status.textContent='Sending your request…';try{const res=await fetch('/api/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const payload=await res.json().catch(()=>({}));if(!res.ok)throw new Error(payload.error||'Unable to send the quote request.');form.reset();status.textContent='Thanks — your quote request has been sent.'}catch(err){status.textContent=err.message||'Unable to send right now. Please email dreamstudio194@gmail.com.'}finally{b.disabled=false}});
 
   const banner=$('#cookie-banner'), accept=$('#analytics-accept'), decline=$('#analytics-decline'), key='dsp-analytics-choice-v1'; const get=()=>{try{return localStorage.getItem(key)}catch{return null}}, set=v=>{try{localStorage.setItem(key,v)}catch{}}; if(banner){banner.hidden=Boolean(get());accept?.addEventListener('click',()=>{set('accepted');banner.hidden=true});decline?.addEventListener('click',()=>{set('essential');banner.hidden=true})}

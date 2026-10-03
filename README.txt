@@ -1,2 +1,3 @@
-Replace styles.css in the repo root.
-This makes the large opening PRINT use its own text-width gradient, so it matches the rainbow distribution of the small top-left Print.
+Upload index.html, styles.css, and script.js to the root of the GitHub repo and replace the existing files.
+
+Adds a 1 -> 200+ Happy customers counter below WhatsApp / Call / Email. The number grows slightly while counting and finishes with a short boom pulse/ring effect.

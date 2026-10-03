@@ -148,3 +148,120 @@
   .viewer-gallery figure,.gallery-flyers figure:first-child,.gallery-flyers figure:nth-child(4),.gallery-real-estate figure:first-child,.gallery-magazine-books figure:first-child,.gallery-magazine-books figure:nth-child(4){grid-column:auto;width:100%;aspect-ratio:4/3;margin:0;transform:none}
   .gallery-postcards figure{aspect-ratio:4/3}
 }
+
+
+/* =========================================================
+   Happy customers count-up
+   ========================================================= */
+.customer-count{
+  position:relative;
+  display:inline-flex;
+  align-items:flex-end;
+  gap:14px;
+  margin-top:42px;
+  padding:4px 4px 10px 0;
+  color:#111;
+  overflow:visible;
+}
+.customer-count-number{
+  position:relative;
+  z-index:2;
+  display:inline-block;
+  font-family:var(--sans);
+  font-size:clamp(4.8rem,9vw,8.5rem);
+  line-height:.78;
+  letter-spacing:-.075em;
+  font-weight:950;
+  transform:scale(.86);
+  transform-origin:left bottom;
+  will-change:transform;
+}
+.customer-count-number::after{
+  content:"+";
+  font-size:.48em;
+  vertical-align:top;
+  margin-left:.06em;
+  opacity:0;
+  transform:translateY(.08em) scale(.7);
+  display:inline-block;
+  transition:opacity .18s ease,transform .26s cubic-bezier(.2,.9,.25,1.35);
+}
+.customer-count.complete .customer-count-number::after{
+  opacity:1;
+  transform:translateY(.08em) scale(1);
+}
+.customer-count-label{
+  position:relative;
+  z-index:2;
+  max-width:150px;
+  padding-bottom:.15em;
+  font-size:clamp(.9rem,1.25vw,1.08rem);
+  line-height:1.05;
+  font-weight:850;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.customer-count-ring{
+  position:absolute;
+  left:26%;
+  bottom:28%;
+  width:72px;
+  height:72px;
+  border:2px solid rgba(17,17,17,.34);
+  border-radius:50%;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,50%) scale(.25);
+}
+.customer-count.boom .customer-count-number{
+  animation:customerBoom .62s cubic-bezier(.17,.84,.44,1);
+}
+.customer-count.boom .customer-count-ring{
+  animation:customerRing .72s ease-out forwards;
+}
+.customer-count.boom::before,
+.customer-count.boom::after{
+  content:"";
+  position:absolute;
+  left:25%;
+  bottom:31%;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#111;
+  opacity:0;
+  pointer-events:none;
+}
+.customer-count.boom::before{animation:customerBurstA .7s ease-out forwards}
+.customer-count.boom::after{animation:customerBurstB .7s ease-out forwards}
+
+@keyframes customerBoom{
+  0%{transform:scale(1)}
+  38%{transform:scale(1.18)}
+  63%{transform:scale(.96)}
+  100%{transform:scale(1)}
+}
+@keyframes customerRing{
+  0%{opacity:.68;transform:translate(-50%,50%) scale(.3)}
+  100%{opacity:0;transform:translate(-50%,50%) scale(2.25)}
+}
+@keyframes customerBurstA{
+  0%{opacity:.7;box-shadow:0 0 #111,0 0 #111,0 0 #111,0 0 #111}
+  100%{opacity:0;box-shadow:58px -28px #111,-52px -34px #111,58px 34px #111,-48px 40px #111}
+}
+@keyframes customerBurstB{
+  0%{opacity:.55;box-shadow:0 0 #111,0 0 #111,0 0 #111,0 0 #111}
+  100%{opacity:0;box-shadow:76px 2px #111,-70px 4px #111,6px -65px #111,-4px 67px #111}
+}
+@media(max-width:900px){
+  .customer-count{margin-top:36px;gap:12px}
+  .customer-count-number{font-size:clamp(4.3rem,21vw,7rem)}
+  .customer-count-label{font-size:.78rem;max-width:120px}
+}
+@media(prefers-reduced-motion:reduce){
+  .customer-count-number{transform:none!important}
+  .customer-count.boom .customer-count-number,
+  .customer-count.boom .customer-count-ring,
+  .customer-count.boom::before,
+  .customer-count.boom::after{animation:none!important}
+}
