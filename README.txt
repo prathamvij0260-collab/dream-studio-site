@@ -1,2 +1,2 @@
-Replace index.html and styles.css in the repo root.
-This keeps the opening PRINT rainbow and also makes PRINT rainbow in the fixed top-left Dream Studio Print header after scrolling.
+Replace styles.css in the repo root.
+This makes the large opening PRINT use its own text-width gradient, so it matches the rainbow distribution of the small top-left Print.
